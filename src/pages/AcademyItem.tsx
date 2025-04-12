@@ -112,7 +112,7 @@ const offerData = {
     benefits: [
       'Learn at your own pace, on your own schedule',
       'Access course materials from anywhere, anytime',
-      'Practical exercises to apply what you've learned',
+      "Practical exercises to apply what you've learned",
       'Community forum for questions and discussions',
       'Regular updates with new content and resources',
       'Lifetime access to course materials'
