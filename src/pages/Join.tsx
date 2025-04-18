@@ -236,7 +236,7 @@ const Join = () => {
                   </div>
                 </div>
                 
-                <div className="flex">
+                {/* <div className="flex">
                   <div className="flex-shrink-0 mt-1">
                     <Check className="h-5 w-5 text-primary" />
                   </div>
@@ -246,7 +246,7 @@ const Join = () => {
                       Receive personalized content and resource recommendations based on your interests and goals.
                     </p>
                   </div>
-                </div>
+                </div> */}
               </div>
               
               <div className="mt-10 p-6 bg-nude-100 rounded-lg">

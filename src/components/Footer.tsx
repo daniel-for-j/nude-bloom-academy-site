@@ -1,6 +1,6 @@
 
 import { Link } from 'react-router-dom';
-import { Mail, Instagram, Twitter, Facebook } from 'lucide-react';
+import { Mail, Instagram, Twitter, Facebook, Linkedin } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -33,8 +33,8 @@ const Footer = () => {
                 <span className="sr-only">Instagram</span>
               </a>
               <a href="#" className="text-primary/80 hover:text-primary transition-colors">
-                <Twitter size={20} />
-                <span className="sr-only">Twitter</span>
+                <Linkedin size={20} />
+                <span className="sr-only">LinkedIn</span>
               </a>
               <a href="#" className="text-primary/80 hover:text-primary transition-colors">
                 <Facebook size={20} />

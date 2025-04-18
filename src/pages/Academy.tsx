@@ -30,7 +30,6 @@ const Academy = () => {
         '1-hour sessions',
         'Flexible scheduling',
         'Action plan after each session',
-        'Email support between sessions',
         'Access to exclusive resources',
       ],
       price: '$199',
@@ -45,17 +44,16 @@ const Academy = () => {
       description: 'Collaborative learning experiences designed to foster community, share diverse perspectives, and tackle common challenges together with our expert facilitators.',
       features: [
         'Interactive group sessions',
-        'Limited to 12 participants',
+        'Limited to 20 participants',
         'Practical exercises',
         'Peer feedback and support',
         'Workshop materials included',
-        '30-day follow-up resources',
       ],
       price: '$99',
       priceDescription: 'per workshop',
       image: 'https://images.unsplash.com/photo-1515169067868-5387ec356754?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80',
       icon: <Users size={24} />,
-      link: '/academy/workshops'
+      link: '/academy/coaching'
     },
     {
       id: 'online-courses',
@@ -67,7 +65,6 @@ const Academy = () => {
         'Downloadable resources',
         'Progress tracking',
         'Community discussion forum',
-        'Completion certificate',
       ],
       price: '$149',
       priceDescription: 'starting price',
