@@ -1,6 +1,6 @@
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 
-const api = axios.create({
+export const api = axios.create({
   baseURL: "http://localhost:3000",
   timeout: 80000,
 });
@@ -12,7 +12,10 @@ export async function getBlogs() {
       console.log(response.data);
       return response.data;
     })
-    .catch((error) => error.data);
+    .catch((error) => {
+      console.log(error.data);
+      return error.data;
+    });
 }
 
 export async function getCourses() {
