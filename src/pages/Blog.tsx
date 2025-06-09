@@ -89,7 +89,7 @@ const Blog = () => {
             {filteredPosts && filteredPosts.length > 0 ? (
               filteredPosts.map((post) => (
                 <article
-                  key={post.id}
+                  key={post._id}
                   className="bg-white rounded-lg overflow-hidden shadow-sm card-hover"
                 >
                   <img
@@ -105,7 +105,7 @@ const Blog = () => {
                     </div>
                     <h3 className="text-xl font-serif font-medium mb-3">
                       <a
-                        href={`/blog/${post.id}`}
+                        href={`/blog/${post._id}`}
                         className="hover:text-primary/80"
                       >
                         {post.title}

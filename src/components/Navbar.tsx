@@ -1,7 +1,6 @@
-
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { Menu, X } from "lucide-react";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -21,10 +20,22 @@ const Navbar = () => {
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center justify-center flex-1">
           <ul className="flex space-x-8">
-            <li><Link to="/about" className="nav-link">About Us</Link></li>
-            <li><Link to="/join" className="nav-link">Join Us</Link></li>
-            <li><Link to="/blog" className="nav-link">Blog</Link></li>
-            <li><Link to="/academy" className="nav-link">Academy</Link></li>
+            <li>
+              <Link to="/about" className="nav-link">
+                About Us
+              </Link>
+            </li>
+
+            <li>
+              <Link to="/blog" className="nav-link">
+                Blog
+              </Link>
+            </li>
+            <li>
+              <Link to="/academy" className="nav-link">
+                Academy
+              </Link>
+            </li>
           </ul>
         </div>
 
@@ -32,7 +43,7 @@ const Navbar = () => {
         <div className="hidden md:block w-20"></div>
 
         {/* Mobile menu button */}
-        <button 
+        <button
           className="md:hidden text-primary"
           onClick={toggleMenu}
           aria-label="Toggle menu"
@@ -47,22 +58,38 @@ const Navbar = () => {
           <div className="container-custom">
             <ul className="flex flex-col space-y-4">
               <li>
-                <Link to="/about" className="nav-link block py-2" onClick={toggleMenu}>
+                <Link
+                  to="/about"
+                  className="nav-link block py-2"
+                  onClick={toggleMenu}
+                >
                   About Us
                 </Link>
               </li>
               <li>
-                <Link to="/join" className="nav-link block py-2" onClick={toggleMenu}>
+                <Link
+                  to="/join"
+                  className="nav-link block py-2"
+                  onClick={toggleMenu}
+                >
                   Join Us
                 </Link>
               </li>
               <li>
-                <Link to="/blog" className="nav-link block py-2" onClick={toggleMenu}>
+                <Link
+                  to="/blog"
+                  className="nav-link block py-2"
+                  onClick={toggleMenu}
+                >
                   Blog
                 </Link>
               </li>
               <li>
-                <Link to="/academy" className="nav-link block py-2" onClick={toggleMenu}>
+                <Link
+                  to="/academy"
+                  className="nav-link block py-2"
+                  onClick={toggleMenu}
+                >
                   Academy
                 </Link>
               </li>

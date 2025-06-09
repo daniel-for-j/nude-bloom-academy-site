@@ -14,7 +14,7 @@ export async function getBlogs() {
     })
     .catch((error) => {
       console.log(error.data);
-      return error.data;
+      return error;
     });
 }
 
@@ -36,4 +36,18 @@ export async function getWorkshops() {
       return response.data;
     })
     .catch((error) => error.data);
+}
+
+export async function getBlog(blogId: string) {
+  const response = await api
+    .get(`/blogs/${blogId}`)
+    .then((response) => {
+      console.log(response.data.blog);
+      return response.data.blog;
+    })
+    .catch((error) => {
+      console.log(error.data);
+      return error.data;
+    });
+  return response;
 }

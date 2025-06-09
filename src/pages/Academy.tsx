@@ -298,7 +298,7 @@ const Academy = () => {
               Explore our offers
             </Link>
             <a
-              href="#"
+              href="mailto:Chiderahkaluidika@gmail.com"
               className="border border-white text-white px-6 py-3 rounded-md font-medium hover:bg-white/10 transition-colors"
             >
               Contact Us
