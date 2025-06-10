@@ -14,6 +14,7 @@ import AcademyItem from "./pages/AcademyItem";
 import NotFound from "./pages/NotFound";
 import UseScrollToTop from "./hooks/useScroll";
 import BlogPost from "./pages/SingleBlog";
+import Admin from "./pages/admin/page";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +35,7 @@ const App = () => {
                 <Route path="/join" element={<Join />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/blog/:id" element={<BlogPost />} />
+                <Route path="/adminlogin/" element={<Admin />} />
                 <Route path="/academy" element={<Academy />} />
                 <Route path="/academy/:type" element={<AcademyItem />} />
                 <Route path="*" element={<NotFound />} />
