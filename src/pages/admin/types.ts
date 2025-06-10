@@ -1,11 +1,9 @@
 export interface Blog {
-  id: string;
+  _id: string;
   title: string;
   body: string;
   category: string;
   thumbnail?: string;
-  createdAt: string;
-  updatedAt: string;
 }
 
 export interface Workshop {

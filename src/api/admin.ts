@@ -19,7 +19,25 @@ export async function addBlog(data: {
 }) {
   const token = localStorage.getItem("token");
   api
-    .post("/admin/addblog", data, {
+    .post("/admin/blog", data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((response) => {
+      console.log(response);
+      return response.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+export async function deleteBlog(id: string) {
+  const token = localStorage.getItem("token");
+  api
+    .delete(`/admin/blog/${id}`, {
       headers: {
         "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${token}`,

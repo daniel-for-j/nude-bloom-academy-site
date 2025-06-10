@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Plus, Book, Users, GraduationCap, Mail } from "lucide-react";
@@ -57,9 +57,8 @@ const Admin = () => {
                   <Book className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">12</div>
                   <p className="text-xs text-muted-foreground">
-                    Published articles
+                    Manage blog articles
                   </p>
                 </CardContent>
               </Card>
@@ -75,9 +74,8 @@ const Admin = () => {
                   <Users className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">8</div>
                   <p className="text-xs text-muted-foreground">
-                    Active workshops
+                    Manage workshops
                   </p>
                 </CardContent>
               </Card>
@@ -91,9 +89,8 @@ const Admin = () => {
                   <GraduationCap className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">15</div>
                   <p className="text-xs text-muted-foreground">
-                    Available courses
+                    Manage courses
                   </p>
                 </CardContent>
               </Card>
@@ -109,8 +106,9 @@ const Admin = () => {
                   <Mail className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">1,234</div>
-                  <p className="text-xs text-muted-foreground">Subscribers</p>
+                  <p className="text-xs text-muted-foreground">
+                    Compose newsletters
+                  </p>
                 </CardContent>
               </Card>
             </div>

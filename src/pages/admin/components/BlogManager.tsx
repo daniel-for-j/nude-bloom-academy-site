@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,31 +13,39 @@ import {
 import { Label } from "@/components/ui/label";
 import { Plus, Edit, Trash2 } from "lucide-react";
 import { Blog } from "../types";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { getBlogs } from "@/api/api";
+import { deleteBlog } from "@/api/admin";
+import { useToast } from "@/hooks/use-toast";
 
 export const BlogManager = () => {
-  const [blogs, setBlogs] = useState<Blog[]>([
-    {
-      id: "1",
-      title: "Understanding ADHD in Children",
-      body: "ADHD affects millions of children worldwide...",
-      category: "Education",
-      thumbnail:
-        "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=400",
-      createdAt: "2024-01-15",
-      updatedAt: "2024-01-15",
-    },
-    {
-      id: "2",
-      title: "SOAR Intervention Strategies",
-      body: "The SOAR method provides effective strategies...",
-      category: "Research",
-      thumbnail:
-        "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400",
-      createdAt: "2024-01-10",
-      updatedAt: "2024-01-12",
-    },
-  ]);
+  const [blogState, setBlogs] = useState<Blog[]>([]);
 
+  const { toast } = useToast();
+  const { data: blogs, status: blogStatus } = useQuery({
+    queryFn: getBlogs,
+    queryKey: ["blog"],
+  });
+  const { mutateAsync: deleteMutate, status: deleteStatus } = useMutation({
+    mutationFn: deleteBlog,
+    onSuccess: (data: any) => {
+      toast({
+        title: "Deleted",
+        description: data.message,
+      });
+    },
+    onError: (data: any) => {
+      toast({
+        title: "Error",
+        description: data.message,
+      });
+    },
+  });
+  useEffect(() => {
+    if (blogs) {
+      setBlogs(blogs.blogs);
+    }
+  }, [blogs]);
   const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -83,7 +91,7 @@ export const BlogManager = () => {
     if (isEditMode && selectedBlog) {
       setBlogs(
         blogs.map((blog) =>
-          blog.id === selectedBlog.id
+          blog._id === selectedBlog._id
             ? {
                 ...blog,
                 ...formData,
@@ -92,22 +100,15 @@ export const BlogManager = () => {
             : blog
         )
       );
-    } else {
-      const newBlog: Blog = {
-        id: Date.now().toString(),
-        ...formData,
-        createdAt: new Date().toISOString().split("T")[0],
-        updatedAt: new Date().toISOString().split("T")[0],
-      };
-      setBlogs([...blogs, newBlog]);
     }
-
     setIsDialogOpen(false);
     resetForm();
   };
 
-  const handleDelete = (id: string) => {
-    setBlogs(blogs.filter((blog) => blog.id !== id));
+  const handleDelete = async (id: string) => {
+    deleteMutate(id)
+      .then(() => setBlogs(blogState.filter((blog) => blog._id !== id)))
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -191,47 +192,49 @@ export const BlogManager = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {blogs.map((blog) => (
-          <Card key={blog.id} className="hover-lift">
-            <CardHeader>
-              {blog.thumbnail && (
-                <img
-                  src={blog.thumbnail}
-                  alt={blog.title}
-                  className="w-full h-40 object-cover rounded-md mb-4"
-                />
-              )}
-              <CardTitle className="line-clamp-2">{blog.title}</CardTitle>
-              <div className="flex items-center justify-between text-sm text-muted-foreground">
-                <span className="bg-primary/10 text-primary px-2 py-1 rounded-md">
-                  {blog.category}
-                </span>
-                <span>{blog.updatedAt}</span>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground line-clamp-3 mb-4">
-                {blog.body}
-              </p>
-              <div className="flex gap-2">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => handleEdit(blog)}
-                >
-                  <Edit className="h-4 w-4" />
-                </Button>
-                <Button
-                  size="sm"
-                  variant="destructive"
-                  onClick={() => handleDelete(blog.id)}
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+        {blogState &&
+          blogState.length > 0 &&
+          blogState.map((blog) => (
+            <Card key={blog._id} className="hover-lift">
+              <CardHeader>
+                {blog.thumbnail && (
+                  <img
+                    src={blog.thumbnail}
+                    alt={blog.title}
+                    className="w-full h-40 object-cover rounded-md mb-4"
+                  />
+                )}
+                <CardTitle className="line-clamp-2">{blog.title}</CardTitle>
+                <div className="flex items-center justify-between text-sm text-muted-foreground">
+                  <span className="bg-primary/10 text-primary px-2 py-1 rounded-md">
+                    {blog.category}
+                  </span>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground line-clamp-3 mb-4">
+                  {blog.body}
+                </p>
+                <div className="flex gap-2">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleEdit(blog)}
+                  >
+                    <Edit className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    disabled={deleteStatus === "pending"}
+                    size="sm"
+                    variant="destructive"
+                    onClick={() => handleDelete(blog._id)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
       </div>
     </div>
   );
