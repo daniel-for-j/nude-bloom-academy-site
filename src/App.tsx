@@ -15,6 +15,8 @@ import NotFound from "./pages/NotFound";
 import UseScrollToTop from "./hooks/useScroll";
 import BlogPost from "./pages/SingleBlog";
 import Admin from "./pages/admin/page";
+import AdminLoginPage from "./pages/login/page";
+import ProtectedRoute from "./components/protectedRoutes";
 
 const queryClient = new QueryClient();
 
@@ -35,10 +37,19 @@ const App = () => {
                 <Route path="/join" element={<Join />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/blog/:id" element={<BlogPost />} />
-                <Route path="/adminlogin/" element={<Admin />} />
+                <Route path="/adminlogin" element={<AdminLoginPage />} />
                 <Route path="/academy" element={<Academy />} />
                 <Route path="/academy/:type" element={<AcademyItem />} />
                 <Route path="*" element={<NotFound />} />
+
+                <Route
+                  path="/admin"
+                  element={
+                    <ProtectedRoute>
+                      <Admin />
+                    </ProtectedRoute>
+                  }
+                />
               </Routes>
             </main>
             <Footer />

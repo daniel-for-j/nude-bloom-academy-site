@@ -5,9 +5,11 @@ export async function login(data: { username: string; password: string }) {
     .post("/auth/", data)
     .then((response) => {
       console.log(response.data);
+      return response.data;
     })
     .catch((error) => {
       console.log(error);
+      throw error;
     });
 }
 
@@ -17,7 +19,7 @@ export async function addBlog(data: {
   category: string;
   thumbnail: File | null;
 }) {
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
   return api
     .post("/admin/blog", data, {
       headers: {
@@ -41,7 +43,7 @@ export async function addCourse(data: {
   link: string;
   thumbnail: File | null;
 }) {
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
   return api
     .post("/admin/course", data, {
       headers: {
@@ -66,7 +68,7 @@ export async function addWorkshop(data: {
   maxNumber: number;
   thumbnail: File | null;
 }) {
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
   return api
     .post("/admin/workshop", data, {
       headers: {
@@ -92,7 +94,7 @@ export async function editCourse(
   },
   id: string
 ) {
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
   try {
     const response = await api.put(`/admin/course/${id}`, data, {
       headers: {
@@ -116,7 +118,7 @@ export async function editBlog(
   },
   id: string
 ) {
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
   return api
     .put(`/admin/blog/${id}`, data, {
       headers: {
@@ -143,7 +145,7 @@ export async function editWorkshop(
   },
   id: string
 ) {
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
   return api
     .put(`/admin/workshop/${id}`, data, {
       headers: {
@@ -161,7 +163,7 @@ export async function editWorkshop(
 }
 
 export async function deleteBlog(id: string) {
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
   return api
     .delete(`/admin/blog/${id}`, {
       headers: {
@@ -179,7 +181,7 @@ export async function deleteBlog(id: string) {
 }
 
 export async function deleteCourse(id: string) {
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
   return api
     .delete(`/admin/course/${id}`, {
       headers: {
@@ -197,7 +199,7 @@ export async function deleteCourse(id: string) {
 }
 
 export async function sendNewsLetter(data: { subject: string; text: string }) {
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
   return api
     .post("/admin/newsletter", data, {
       headers: {

@@ -29,7 +29,7 @@ const Blog = () => {
 
   // Filter posts based on search query and selected category
   const filteredPosts =
-    blogPosts.data &&
+    blogPosts.data != undefined &&
     blogPosts.data.blogs.filter((post) => {
       const matchesSearch =
         post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
