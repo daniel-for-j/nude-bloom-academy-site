@@ -20,13 +20,18 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const CourseManager = () => {
   const { toast } = useToast();
-  const { data: courses, status: courseStatus } = useQuery({
+  const {
+    data: courses,
+    status: courseStatus,
+    refetch,
+  } = useQuery({
     queryFn: getCourses,
     queryKey: ["course"],
   });
   const { mutateAsync: deleteMutate, status: deleteStatus } = useMutation({
     mutationFn: deleteCourse,
     onSuccess: (data: any) => {
+      refetch();
       toast({
         title: "Deleted",
         description: data.message,
@@ -42,6 +47,7 @@ export const CourseManager = () => {
   const { mutateAsync: addMutate, status: addStatus } = useMutation({
     mutationFn: addCourse,
     onSuccess: (data: any) => {
+      refetch();
       toast({
         title: "course added",
         description: data.message,
@@ -69,8 +75,9 @@ export const CourseManager = () => {
       id: string;
     }) => editCourse(data, id),
     onSuccess: (data) => {
+      refetch();
       toast({
-        title: "course added",
+        title: "Edited successfully",
         description: data.message,
       });
     },
@@ -83,19 +90,26 @@ export const CourseManager = () => {
   });
   useEffect(() => {
     if (courses) {
-      setCourses(courses);
+      setCourses(courses.data);
     }
   }, [courses]);
   const [courseState, setCourses] = useState<Course[]>([]);
-
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    title: string;
+    description: string;
+    price: string;
+    thumbnail: File;
+    thumbnailUrl: string;
+    link: string;
+  }>({
     title: "",
+    thumbnailUrl: "",
     description: "",
-    thumbnail: "",
+    thumbnail: null,
     price: "",
     link: "",
   });
@@ -104,7 +118,8 @@ export const CourseManager = () => {
     setFormData({
       title: "",
       description: "",
-      thumbnail: "",
+      thumbnail: null,
+      thumbnailUrl: "",
       price: "",
       link: "",
     });
@@ -122,57 +137,33 @@ export const CourseManager = () => {
     setFormData({
       title: course.title,
       description: course.description,
-      thumbnail: course.thumbnail || "",
+      thumbnail: null,
+      thumbnailUrl: course.thumbnailUrl,
       price: course.price,
       link: course.link,
     });
-    editMutate(formData, course._id)
-      .then(() => {
-        setIsEditMode(true);
-        setIsDialogOpen(true);
-      })
-      .catch(() => {
-        return;
-      });
+    setIsEditMode(true);
+    setIsDialogOpen(true);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isEditMode && selectedCourse) {
-      setCourses(
-        courseState.map((course) =>
-          course._id === selectedCourse._id
-            ? {
-                ...course,
-                ...formData,
-                updatedAt: new Date().toISOString().split("T")[0],
-              }
-            : course
-        )
-      );
+      try {
+        editMutate({ data: formData, id: selectedCourse._id });
+      } catch (err) {
+        throw err;
+      }
+    } else {
+      addMutate(formData)
+        .then(() => {
+          setIsDialogOpen(false);
+          resetForm();
+        })
+        .catch(() => {
+          return;
+        });
     }
-    addMutate(formData)
-      .then(() => {
-        setIsDialogOpen(false);
-        resetForm();
-      })
-      .catch(() => {
-        return;
-      });
-
-    // if (isEditMode && selectedCourse) {
-    //   setCourses(
-    //     courseState.map((course) =>
-    //       course._id === selectedCourse._id
-    //         ? {
-    //             ...course,
-    //             ...formData,
-    //             updatedAt: new Date().toISOString().split("T")[0],
-    //           }
-    //         : course
-    //     )
-    //   );
-    // }
   };
 
   const handleDelete = (id: string) => {
@@ -181,6 +172,12 @@ export const CourseManager = () => {
       .catch((err) => console.log(err));
   };
 
+  if (courseStatus === "pending") {
+    return <div>Loading...</div>;
+  }
+  if (courseStatus === "error") {
+    return <div>Something went wrong</div>;
+  }
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -237,14 +234,16 @@ export const CourseManager = () => {
                 </div>
               </div>
               <div>
-                <Label htmlFor="thumbnail">Thumbnail URL</Label>
+                <Label htmlFor="thumbnail">Thumbnail</Label>
                 <Input
                   id="thumbnail"
-                  value={formData.thumbnail}
-                  onChange={(e) =>
-                    setFormData({ ...formData, thumbnail: e.target.value })
-                  }
-                  placeholder="https://example.com/image.jpg"
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0] || null;
+                    setFormData({ ...formData, thumbnail: file });
+                  }}
+                  placeholder="Choose an image file"
                 />
               </div>
               <div>
@@ -266,7 +265,7 @@ export const CourseManager = () => {
                 <Button
                   type="button"
                   variant="outline"
-                  disabled={addStatus === "pending"}
+                  disabled={addStatus === "pending" || editStatus === "pending"}
                 >
                   Cancel
                 </Button>
@@ -282,9 +281,9 @@ export const CourseManager = () => {
           courseState.map((course) => (
             <Card key={course._id} className="hover-lift">
               <CardHeader>
-                {course.thumbnail && (
+                {course.thumbnailUrl && (
                   <img
-                    src={course.thumbnail}
+                    src={course.thumbnailUrl}
                     alt={course.title}
                     className="w-full h-40 object-cover rounded-md mb-4"
                   />
@@ -320,6 +319,7 @@ export const CourseManager = () => {
                     size="sm"
                     variant="destructive"
                     onClick={() => handleDelete(course._id)}
+                    disabled={deleteStatus === "pending"}
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>

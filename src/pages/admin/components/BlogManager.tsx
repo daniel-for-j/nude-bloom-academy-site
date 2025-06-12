@@ -95,7 +95,6 @@ export const BlogManager = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const [formData, setFormData] = useState<{
-    _id?: string;
     title: string;
     body: string;
     category: string;
@@ -129,7 +128,6 @@ export const BlogManager = () => {
   const handleEdit = (blog: Blog) => {
     setSelectedBlog(blog);
     setFormData({
-      _id: blog._id,
       title: blog.title,
       body: blog.body,
       category: blog.category,
@@ -144,9 +142,8 @@ export const BlogManager = () => {
     e.preventDefault();
 
     if (isEditMode && selectedBlog) {
-      console.log("new form data: ", formData);
       try {
-        editMutate({ data: formData, id: formData._id });
+        editMutate({ data: formData, id: selectedBlog._id });
       } catch (err) {
         throw err;
       }
@@ -154,10 +151,12 @@ export const BlogManager = () => {
       const newBlog: Blog = {
         ...formData,
       };
-      addMutate(formData).then(() => setBlogs([...blogState, newBlog]));
+      addMutate(formData).then(() => {
+        setBlogs([...blogState, newBlog]);
+        setIsDialogOpen(false);
+        resetForm();
+      });
     }
-    setIsDialogOpen(false);
-    resetForm();
   };
 
   const handleDelete = async (id: string) => {
@@ -166,6 +165,12 @@ export const BlogManager = () => {
       .catch((err) => console.log(err));
   };
 
+  if (blogStatus === "pending") {
+    return <div>Loading...</div>;
+  }
+  if (blogStatus === "error") {
+    return <div>Something went wrong</div>;
+  }
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -238,7 +243,7 @@ export const BlogManager = () => {
                 <Button
                   type="button"
                   variant="outline"
-                  disabled={addStatus === "pending"}
+                  disabled={addStatus === "pending" || editStatus === "pending"}
                   onClick={() => setIsDialogOpen(false)}
                 >
                   Cancel

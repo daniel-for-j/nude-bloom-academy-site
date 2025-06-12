@@ -14,7 +14,8 @@ export interface Workshop {
   date: string;
   price: string;
   maxNumber: number;
-  thumbnail?: string;
+  thumbnail?: File;
+  thumbnailUrl?: string;
   participants: string[];
   createdAt: string;
   updatedAt: string;
@@ -24,7 +25,8 @@ export interface Course {
   _id: string;
   title: string;
   description: string;
-  thumbnail?: string;
+  thumbnail?: File;
+  thumbnailUrl: string;
   price: string;
   link: string;
 }
