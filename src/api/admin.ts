@@ -132,6 +132,33 @@ export async function editBlog(
       console.log(error);
     });
 }
+export async function editWorkshop(
+  data: {
+    name?: string;
+    details?: string;
+    price?: string;
+    date?: string;
+    maxNumber?: number;
+    thumbnail?: File | null;
+  },
+  id: string
+) {
+  const token = localStorage.getItem("token");
+  return api
+    .put(`/admin/workshop/${id}`, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((response) => {
+      console.log(response);
+      return response.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
 
 export async function deleteBlog(id: string) {
   const token = localStorage.getItem("token");
@@ -166,5 +193,23 @@ export async function deleteCourse(id: string) {
     })
     .catch((error) => {
       console.log(error);
+    });
+}
+
+export async function sendNewsLetter(data: { subject: string; text: string }) {
+  const token = localStorage.getItem("token");
+  return api
+    .post("/admin/newsletter", data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((response) => {
+      console.log(response);
+      return response.data;
+    })
+    .catch((error) => {
+      console.log(error);
+      throw error;
     });
 }

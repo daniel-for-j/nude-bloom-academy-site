@@ -14,20 +14,27 @@ import { Label } from "@/components/ui/label";
 import { Plus, Edit, Trash2, Users } from "lucide-react";
 import { Workshop } from "../types";
 import { getWorkshops } from "@/api/api";
-import { addWorkshop } from "@/api/admin";
+import { addWorkshop, editWorkshop } from "@/api/admin";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const WorkshopManager = () => {
   const { toast } = useToast();
-  const { data: workshops, status: workshopStatus } = useQuery({
+  const {
+    data: workshops,
+    status: workshopStatus,
+    refetch,
+  } = useQuery({
     queryFn: getWorkshops,
     queryKey: ["workshop"],
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
 
   const { mutateAsync: addMutate, status: addStatus } = useMutation({
     mutationFn: addWorkshop,
     onSuccess: (data: any) => {
+      refetch();
       toast({
         title: "workshop added",
         description: data.message,
@@ -40,9 +47,38 @@ export const WorkshopManager = () => {
       });
     },
   });
+  const { mutateAsync: editMutate, status: editStatus } = useMutation({
+    mutationFn: ({
+      data,
+      id,
+    }: {
+      data: {
+        name?: string;
+        details?: string;
+        price?: string;
+        date?: string;
+        maxNumber?: number;
+        thumbnail?: File | null;
+      };
+      id: string;
+    }) => editWorkshop(data, id),
+    onSuccess: (data) => {
+      refetch();
+      toast({
+        title: "Edited successfully",
+        description: data.message,
+      });
+    },
+    onError: (data: any) => {
+      toast({
+        title: "Error",
+        description: data.message,
+      });
+    },
+  });
   useEffect(() => {
     if (workshops) {
-      setWorkshops(workshops);
+      setWorkshops(workshops.data);
     }
   }, [workshops]);
   const [workshopState, setWorkshops] = useState<Workshop[]>([]);
@@ -59,7 +95,8 @@ export const WorkshopManager = () => {
     date: "",
     price: "",
     maxNumber: 0,
-    thumbnail: "",
+    thumbnail: null,
+    thumbnailUrl: "",
   });
 
   const resetForm = () => {
@@ -69,7 +106,8 @@ export const WorkshopManager = () => {
       date: "",
       price: "",
       maxNumber: 0,
-      thumbnail: "",
+      thumbnail: null,
+      thumbnailUrl: "",
     });
     setSelectedWorkshop(null);
     setIsEditMode(false);
@@ -88,7 +126,8 @@ export const WorkshopManager = () => {
       date: workshop.date,
       price: workshop.price,
       maxNumber: workshop.maxNumber,
-      thumbnail: workshop.thumbnail || "",
+      thumbnail: null,
+      thumbnailUrl: workshop.thumbnailUrl || "",
     });
     setIsEditMode(true);
     setIsDialogOpen(true);
@@ -96,36 +135,22 @@ export const WorkshopManager = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
     if (isEditMode && selectedWorkshop) {
-      setWorkshops(
-        workshopState.map((workshop) =>
-          workshop.id === selectedWorkshop.id
-            ? {
-                ...workshop,
-                ...formData,
-                updatedAt: new Date().toISOString().split("T")[0],
-              }
-            : workshop
-        )
-      );
+      try {
+        editMutate({ data: formData, id: selectedWorkshop._id });
+      } catch (err) {
+        throw err;
+      }
     } else {
-      const newWorkshop: Workshop = {
-        id: Date.now().toString(),
-        ...formData,
-        participants: [],
-        createdAt: new Date().toISOString().split("T")[0],
-        updatedAt: new Date().toISOString().split("T")[0],
-      };
-      setWorkshops([...workshops, newWorkshop]);
+      addMutate(formData)
+        .then(() => {
+          setIsDialogOpen(false);
+          resetForm();
+        })
+        .catch(() => {
+          return;
+        });
     }
-
-    setIsDialogOpen(false);
-    resetForm();
-  };
-
-  const handleDelete = (id: string) => {
-    setWorkshops(workshops.filter((workshop) => workshop.id !== id));
   };
 
   return (
@@ -199,14 +224,16 @@ export const WorkshopManager = () => {
                 />
               </div>
               <div>
-                <Label htmlFor="thumbnail">Thumbnail URL</Label>
+                <Label htmlFor="thumbnail">Thumbnail</Label>
                 <Input
                   id="thumbnail"
-                  value={formData.thumbnail}
-                  onChange={(e) =>
-                    setFormData({ ...formData, thumbnail: e.target.value })
-                  }
-                  placeholder="https://example.com/image.jpg"
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0] || null;
+                    setFormData({ ...formData, thumbnail: file });
+                  }}
+                  placeholder="Choose an image file"
                 />
               </div>
               <div>
@@ -242,11 +269,11 @@ export const WorkshopManager = () => {
         {workshopState &&
           workshopState.length > 0 &&
           workshopState.map((workshop) => (
-            <Card key={workshop.id} className="hover-lift">
+            <Card key={workshop._id} className="hover-lift">
               <CardHeader>
-                {workshop.thumbnail && (
+                {workshop.thumbnailUrl && (
                   <img
-                    src={workshop.thumbnail}
+                    src={workshop.thumbnailUrl}
                     alt={workshop.name}
                     className="w-full h-40 object-cover rounded-md mb-4"
                   />
@@ -255,7 +282,7 @@ export const WorkshopManager = () => {
                 <div className="flex items-center justify-between text-sm text-muted-foreground">
                   <span>{new Date(workshop.date).toLocaleDateString()}</span>
                   <span className="font-semibold text-primary">
-                    {workshop.price}
+                    ₦{workshop.price}
                   </span>
                 </div>
               </CardHeader>
@@ -277,13 +304,6 @@ export const WorkshopManager = () => {
                     onClick={() => handleEdit(workshop)}
                   >
                     <Edit className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="destructive"
-                    onClick={() => handleDelete(workshop.id)}
-                  >
-                    <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
               </CardContent>
