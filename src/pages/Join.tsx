@@ -214,7 +214,7 @@ const Join = () => {
                   className="btn-primary w-full"
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? "Submitting..." : "Join Now"}
+                  {isSubmitting ? "Submitting..." : "Proceed to Checkout"}
                 </button>
               </form>
             </div>

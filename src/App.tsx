@@ -10,7 +10,7 @@ import About from "./pages/About";
 import Join from "./pages/Join";
 import Blog from "./pages/Blog";
 import Academy from "./pages/Academy";
-import AcademyItem from "./pages/AcademyItem";
+import AcademyItem from "./pages/academyitem/AcademyItem";
 import NotFound from "./pages/NotFound";
 import UseScrollToTop from "./hooks/useScroll";
 import BlogPost from "./pages/SingleBlog";

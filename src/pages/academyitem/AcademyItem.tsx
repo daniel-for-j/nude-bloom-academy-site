@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import PageHeader from "../components/PageHeader";
+import PageHeader from "../../components/PageHeader";
 import {
   ArrowLeft,
   Calendar,
@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { getCourses, getWorkshops } from "@/api/api";
+import CourseCard from "./components/course-card";
 
 // Offer data
 const offerData = {
@@ -334,7 +335,7 @@ const AcademyItem = () => {
                         </div>
                         <div className="mt-4 md:mt-0 flex items-center">
                           <div className="text-2xl font-serif font-medium mr-4">
-                            {workshop.price}
+                            ₦{workshop.price}
                           </div>
                           <button
                             onClick={() => navigate("/join")}
@@ -358,33 +359,8 @@ const AcademyItem = () => {
               <div className="space-y-6">
                 {courses.data &&
                   courses.data.data.map((course, index) => (
-                    <div
-                      key={index}
-                      className="bg-white p-6 rounded-lg shadow-sm border border-nude-200"
-                    >
-                      <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between">
-                        <div className="flex-1">
-                          <h4 className="text-xl font-medium mb-2">
-                            {course.title}
-                          </h4>
-                          <p className="text-primary/80 mb-3">
-                            {course.description}
-                          </p>
-                        </div>
-                        <div className="mt-6 lg:mt-0 lg:ml-8 flex flex-col items-center">
-                          <div className="text-2xl font-serif font-medium mb-3">
-                            {course.price}
-                          </div>
-                          <a
-                            href={course.link}
-                            target="_blank"
-                            className="btn-primary inline-flex items-center"
-                          >
-                            View on udemy{" "}
-                            <ArrowRight size={16} className="ml-2" />
-                          </a>
-                        </div>
-                      </div>
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                      <CourseCard key={course._id} course={course} />
                     </div>
                   ))}
               </div>
