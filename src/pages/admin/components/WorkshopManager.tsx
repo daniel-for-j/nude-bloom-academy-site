@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,38 +13,39 @@ import {
 import { Label } from "@/components/ui/label";
 import { Plus, Edit, Trash2, Users } from "lucide-react";
 import { Workshop } from "../types";
+import { getWorkshops } from "@/api/api";
+import { addWorkshop } from "@/api/admin";
+import { useToast } from "@/hooks/use-toast";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const WorkshopManager = () => {
-  const [workshops, setWorkshops] = useState<Workshop[]>([
-    {
-      id: "1",
-      name: "SOAR for Educators",
-      details:
-        "A comprehensive workshop for teachers and educators on implementing SOAR strategies in the classroom.",
-      date: "2024-03-15",
-      price: "$199",
-      maxNumber: 25,
-      thumbnail:
-        "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400",
-      participants: ["john@example.com", "jane@example.com"],
-      createdAt: "2024-01-15",
-      updatedAt: "2024-01-15",
+  const { toast } = useToast();
+  const { data: workshops, status: workshopStatus } = useQuery({
+    queryFn: getWorkshops,
+    queryKey: ["workshop"],
+  });
+
+  const { mutateAsync: addMutate, status: addStatus } = useMutation({
+    mutationFn: addWorkshop,
+    onSuccess: (data: any) => {
+      toast({
+        title: "workshop added",
+        description: data.message,
+      });
     },
-    {
-      id: "2",
-      name: "Parent Support Workshop",
-      details:
-        "Supporting parents in understanding and implementing SOAR techniques at home.",
-      date: "2024-03-22",
-      price: "$149",
-      maxNumber: 20,
-      thumbnail:
-        "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=400",
-      participants: ["parent1@example.com"],
-      createdAt: "2024-01-10",
-      updatedAt: "2024-01-12",
+    onError: (data: any) => {
+      toast({
+        title: "Error",
+        description: data.message,
+      });
     },
-  ]);
+  });
+  useEffect(() => {
+    if (workshops) {
+      setWorkshops(workshops);
+    }
+  }, [workshops]);
+  const [workshopState, setWorkshops] = useState<Workshop[]>([]);
 
   const [selectedWorkshop, setSelectedWorkshop] = useState<Workshop | null>(
     null
@@ -98,7 +99,7 @@ export const WorkshopManager = () => {
 
     if (isEditMode && selectedWorkshop) {
       setWorkshops(
-        workshops.map((workshop) =>
+        workshopState.map((workshop) =>
           workshop.id === selectedWorkshop.id
             ? {
                 ...workshop,
@@ -238,54 +239,56 @@ export const WorkshopManager = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {workshops.map((workshop) => (
-          <Card key={workshop.id} className="hover-lift">
-            <CardHeader>
-              {workshop.thumbnail && (
-                <img
-                  src={workshop.thumbnail}
-                  alt={workshop.name}
-                  className="w-full h-40 object-cover rounded-md mb-4"
-                />
-              )}
-              <CardTitle className="line-clamp-2">{workshop.name}</CardTitle>
-              <div className="flex items-center justify-between text-sm text-muted-foreground">
-                <span>{new Date(workshop.date).toLocaleDateString()}</span>
-                <span className="font-semibold text-primary">
-                  {workshop.price}
-                </span>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground line-clamp-2 mb-4">
-                {workshop.details}
-              </p>
-              <div className="flex items-center gap-2 mb-4 text-sm">
-                <Users className="h-4 w-4" />
-                <span>
-                  {workshop.participants.length}/{workshop.maxNumber}{" "}
-                  participants
-                </span>
-              </div>
-              <div className="flex gap-2">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => handleEdit(workshop)}
-                >
-                  <Edit className="h-4 w-4" />
-                </Button>
-                <Button
-                  size="sm"
-                  variant="destructive"
-                  onClick={() => handleDelete(workshop.id)}
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+        {workshopState &&
+          workshopState.length > 0 &&
+          workshopState.map((workshop) => (
+            <Card key={workshop.id} className="hover-lift">
+              <CardHeader>
+                {workshop.thumbnail && (
+                  <img
+                    src={workshop.thumbnail}
+                    alt={workshop.name}
+                    className="w-full h-40 object-cover rounded-md mb-4"
+                  />
+                )}
+                <CardTitle className="line-clamp-2">{workshop.name}</CardTitle>
+                <div className="flex items-center justify-between text-sm text-muted-foreground">
+                  <span>{new Date(workshop.date).toLocaleDateString()}</span>
+                  <span className="font-semibold text-primary">
+                    {workshop.price}
+                  </span>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground line-clamp-2 mb-4">
+                  {workshop.details}
+                </p>
+                <div className="flex items-center gap-2 mb-4 text-sm">
+                  <Users className="h-4 w-4" />
+                  <span>
+                    {workshop.participants.length}/{workshop.maxNumber}{" "}
+                    participants
+                  </span>
+                </div>
+                <div className="flex gap-2">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleEdit(workshop)}
+                  >
+                    <Edit className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="destructive"
+                    onClick={() => handleDelete(workshop.id)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
       </div>
     </div>
   );

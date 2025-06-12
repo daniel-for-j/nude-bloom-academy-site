@@ -15,7 +15,7 @@ import { Plus, Edit, Trash2 } from "lucide-react";
 import { Blog } from "../types";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { getBlogs } from "@/api/api";
-import { deleteBlog } from "@/api/admin";
+import { deleteBlog, addBlog, editBlog } from "@/api/admin";
 import { useToast } from "@/hooks/use-toast";
 
 export const BlogManager = () => {
@@ -25,12 +25,56 @@ export const BlogManager = () => {
   const { data: blogs, status: blogStatus } = useQuery({
     queryFn: getBlogs,
     queryKey: ["blog"],
+    refetchOnWindowFocus: false,
   });
   const { mutateAsync: deleteMutate, status: deleteStatus } = useMutation({
     mutationFn: deleteBlog,
     onSuccess: (data: any) => {
       toast({
         title: "Deleted",
+        description: data.message,
+      });
+    },
+    onError: (data: any) => {
+      toast({
+        title: "Error",
+        description: data.message,
+      });
+    },
+  });
+  const { mutateAsync: addMutate, status: addStatus } = useMutation({
+    mutationFn: addBlog,
+    onSuccess: (data: any) => {
+      setIsDialogOpen(false);
+      toast({
+        title: "blog added",
+        description: data.message,
+      });
+    },
+    onError: (data: any) => {
+      toast({
+        title: "Error",
+        description: data.message,
+      });
+    },
+  });
+  const { mutateAsync: editMutate, status: editStatus } = useMutation({
+    mutationFn: ({
+      data,
+      id,
+    }: {
+      data: {
+        title?: string;
+        body?: string;
+        category?: string;
+        thumbnail?: File | null;
+      };
+      id: string;
+    }) => editBlog(data, id),
+    onSuccess: (data) => {
+      setIsDialogOpen(false);
+      toast({
+        title: "Course Edited",
         description: data.message,
       });
     },
@@ -50,11 +94,19 @@ export const BlogManager = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    _id?: string;
+    title: string;
+    body: string;
+    category: string;
+    thumbnail: File;
+    thumbnailUrl: string;
+  }>({
     title: "",
     body: "",
     category: "",
-    thumbnail: "",
+    thumbnail: null,
+    thumbnailUrl: "",
   });
 
   const resetForm = () => {
@@ -62,7 +114,8 @@ export const BlogManager = () => {
       title: "",
       body: "",
       category: "",
-      thumbnail: "",
+      thumbnail: null,
+      thumbnailUrl: "",
     });
     setSelectedBlog(null);
     setIsEditMode(false);
@@ -76,30 +129,32 @@ export const BlogManager = () => {
   const handleEdit = (blog: Blog) => {
     setSelectedBlog(blog);
     setFormData({
+      _id: blog._id,
       title: blog.title,
       body: blog.body,
       category: blog.category,
-      thumbnail: blog.thumbnail || "",
+      thumbnail: blog.thumbnail,
+      thumbnailUrl: blog.thumbnailUrl || null,
     });
     setIsEditMode(true);
     setIsDialogOpen(true);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (isEditMode && selectedBlog) {
-      setBlogs(
-        blogs.map((blog) =>
-          blog._id === selectedBlog._id
-            ? {
-                ...blog,
-                ...formData,
-                updatedAt: new Date().toISOString().split("T")[0],
-              }
-            : blog
-        )
-      );
+      console.log("new form data: ", formData);
+      try {
+        editMutate({ data: formData, id: formData._id });
+      } catch (err) {
+        throw err;
+      }
+    } else {
+      const newBlog: Blog = {
+        ...formData,
+      };
+      addMutate(formData).then(() => setBlogs([...blogState, newBlog]));
     }
     setIsDialogOpen(false);
     resetForm();
@@ -152,14 +207,16 @@ export const BlogManager = () => {
                 />
               </div>
               <div>
-                <Label htmlFor="thumbnail">Thumbnail URL</Label>
+                <Label htmlFor="thumbnail">Thumbnail</Label>
                 <Input
                   id="thumbnail"
-                  value={formData.thumbnail}
-                  onChange={(e) =>
-                    setFormData({ ...formData, thumbnail: e.target.value })
-                  }
-                  placeholder="https://example.com/image.jpg"
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0] || null;
+                    setFormData({ ...formData, thumbnail: file });
+                  }}
+                  placeholder="Choose an image file"
                 />
               </div>
               <div>
@@ -181,6 +238,7 @@ export const BlogManager = () => {
                 <Button
                   type="button"
                   variant="outline"
+                  disabled={addStatus === "pending"}
                   onClick={() => setIsDialogOpen(false)}
                 >
                   Cancel
@@ -197,11 +255,11 @@ export const BlogManager = () => {
           blogState.map((blog) => (
             <Card key={blog._id} className="hover-lift">
               <CardHeader>
-                {blog.thumbnail && (
+                {blog.thumbnailUrl && (
                   <img
-                    src={blog.thumbnail}
+                    src={blog.thumbnailUrl}
                     alt={blog.title}
-                    className="w-full h-40 object-cover rounded-md mb-4"
+                    className="w-full h-full object-cover rounded-md mb-4"
                   />
                 )}
                 <CardTitle className="line-clamp-2">{blog.title}</CardTitle>
