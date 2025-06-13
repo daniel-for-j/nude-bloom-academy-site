@@ -18,7 +18,6 @@ export default function WorkshopCard({
   workshop: WorkshopProps;
   onRegister: () => void;
 }) {
-  const newDate = new Date();
   return (
     <Card className="group relative overflow-hidden h-64 transition-all duration-300 hover:shadow-lg">
       {/* Background Image with Gradient Overlay */}

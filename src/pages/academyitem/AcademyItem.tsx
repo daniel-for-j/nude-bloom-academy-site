@@ -2,13 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import PageHeader from "../../components/PageHeader";
-import {
-  ArrowLeft,
-  Calendar,
-  Clock,
-  CheckCircle,
-  ArrowRight,
-} from "lucide-react";
+import { ArrowLeft, CheckCircle } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { getCourses, getWorkshops } from "@/api/api";
 import CourseCard from "./components/course-card";
@@ -301,7 +295,14 @@ const AcademyItem = () => {
           {offerType === "coaching" && (
             <div className="flex justify-center min-w-96">
               <button
-                onClick={() => navigate("/join")}
+                onClick={() =>
+                  navigate("/join", {
+                    state: {
+                      price: 500,
+                      programme: "coaching",
+                    },
+                  })
+                }
                 className="btn-primary min-w-96"
               >
                 Enroll
@@ -324,6 +325,7 @@ const AcademyItem = () => {
                           state: {
                             price: workshop.price,
                             programme: "workshop",
+                            workshopID: workshop._id,
                           },
                         })
                       }
@@ -341,7 +343,7 @@ const AcademyItem = () => {
               </h3>
               <div className="space-y-6">
                 {courses.data &&
-                  courses.data.data.map((course, index) => (
+                  courses.data.data.map((course) => (
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                       <CourseCard key={course._id} course={course} />
                     </div>

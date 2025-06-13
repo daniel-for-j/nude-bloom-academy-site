@@ -51,3 +51,22 @@ export async function getBlog(blogId: string) {
     });
   return response;
 }
+
+export async function register(data: {
+  name: string;
+  email: string;
+  programme: "workshop" | "coaching";
+  workshopID?: string;
+  userMessage?: string;
+}) {
+  return api
+    .post("/user", data)
+    .then((response) => {
+      console.log(response.data);
+      return response.data;
+    })
+    .catch((error) => {
+      console.log(error);
+      throw error;
+    });
+}

@@ -26,6 +26,7 @@ export const BlogManager = () => {
     queryFn: getBlogs,
     queryKey: ["blog"],
     refetchOnWindowFocus: false,
+    staleTime: 300000,
   });
   const { mutateAsync: deleteMutate, status: deleteStatus } = useMutation({
     mutationFn: deleteBlog,

@@ -4,13 +4,13 @@ import { useForm } from "react-hook-form";
 import PageHeader from "../components/PageHeader";
 import { Check } from "lucide-react";
 import { useLocation } from "react-router-dom";
+import { register as registerApi } from "@/api/api";
+import { useMutation } from "@tanstack/react-query";
 
 type FormData = {
-  firstName: string;
-  lastName: string;
+  name: string;
   email: string;
-  interests: string[];
-  message: string;
+  userMessage?: string;
 };
 
 const Join = () => {
@@ -20,23 +20,31 @@ const Join = () => {
     formState: { errors },
     reset,
   } = useForm<FormData>();
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const location = useLocation();
-  const { price, programme } = location.state || {};
+  const { price, programme, workshopID } = location.state || {};
+  const { mutateAsync: mutate, status } = useMutation({
+    mutationFn: registerApi,
+    onError: (err) => {
+      toast.error("Something went wrong", {
+        description: err.message,
+      });
+      throw err;
+    },
+    onSuccess: (data) => {
+      toast.success("Success", {
+        description: data.message,
+      });
+    },
+  });
 
   const onSubmit = async (data: FormData) => {
-    setIsSubmitting(true);
-
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    console.log("Form submitted:", data);
-    toast.success("Thank you for joining our community!", {
-      description: "We'll be in touch soon.",
+    await mutate({
+      ...data,
+      programme: programme,
+      workshopID: workshopID ? workshopID : undefined,
     });
 
     reset();
-    setIsSubmitting(false);
   };
 
   return (
@@ -63,48 +71,24 @@ const Join = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label
-                      htmlFor="firstName"
+                      htmlFor="name"
                       className="block text-sm font-medium mb-1"
                     >
                       First Name <span className="text-red-500">*</span>
                     </label>
                     <input
-                      id="firstName"
+                      id="name"
                       type="text"
                       className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-nude-300 ${
-                        errors.firstName ? "border-red-500" : "border-nude-300"
+                        errors.name ? "border-red-500" : "border-nude-300"
                       }`}
-                      {...register("firstName", {
+                      {...register("name", {
                         required: "First name is required",
                       })}
                     />
-                    {errors.firstName && (
+                    {errors.name && (
                       <p className="text-red-500 text-xs mt-1">
-                        {errors.firstName.message}
-                      </p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label
-                      htmlFor="lastName"
-                      className="block text-sm font-medium mb-1"
-                    >
-                      Last Name <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      id="lastName"
-                      type="text"
-                      className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-nude-300 ${
-                        errors.lastName ? "border-red-500" : "border-nude-300"
-                      }`}
-                      {...register("lastName", {
-                        required: "Last name is required",
-                      })}
-                    />
-                    {errors.lastName && (
-                      <p className="text-red-500 text-xs mt-1">
-                        {errors.lastName.message}
+                        {errors.name.message}
                       </p>
                     )}
                   </div>
@@ -139,63 +123,6 @@ const Join = () => {
                   )}
                 </div>
 
-                {/* <div>
-                  <span className="block text-sm font-medium mb-2">I'm interested in:</span>
-                  <div className="space-y-2">
-                    <div className="flex items-center">
-                      <input
-                        id="coaching"
-                        type="checkbox"
-                        className="h-4 w-4 border-nude-300 rounded"
-                        value="Coaching"
-                        {...register('interests')}
-                      />
-                      <label htmlFor="coaching" className="ml-2 text-sm">
-                        One-on-One Coaching
-                      </label>
-                    </div>
-                    
-                    <div className="flex items-center">
-                      <input
-                        id="workshops"
-                        type="checkbox"
-                        className="h-4 w-4 border-nude-300 rounded"
-                        value="Workshops"
-                        {...register('interests')}
-                      />
-                      <label htmlFor="workshops" className="ml-2 text-sm">
-                        Group Workshops
-                      </label>
-                    </div>
-                    
-                    <div className="flex items-center">
-                      <input
-                        id="courses"
-                        type="checkbox"
-                        className="h-4 w-4 border-nude-300 rounded"
-                        value="Courses"
-                        {...register('interests')}
-                      />
-                      <label htmlFor="courses" className="ml-2 text-sm">
-                        Online Courses
-                      </label>
-                    </div>
-                    
-                    <div className="flex items-center">
-                      <input
-                        id="newsletter"
-                        type="checkbox"
-                        className="h-4 w-4 border-nude-300 rounded"
-                        value="Newsletter"
-                        {...register('interests')}
-                      />
-                      <label htmlFor="newsletter" className="ml-2 text-sm">
-                        Newsletter & Updates
-                      </label>
-                    </div>
-                  </div>
-                </div> */}
-
                 <div>
                   <label
                     htmlFor="message"
@@ -208,16 +135,16 @@ const Join = () => {
                     rows={4}
                     className="w-full px-4 py-2 border border-nude-300 rounded-md focus:outline-none focus:ring-2 focus:ring-nude-300"
                     placeholder="Tell us a bit about yourself and what you hope to gain from our community..."
-                    {...register("message")}
+                    {...register("userMessage")}
                   ></textarea>
                 </div>
 
                 <button
                   type="submit"
-                  className="btn-primary w-full"
-                  disabled={isSubmitting || !price || !programme}
+                  className={`disabled:bg-green-600 btn-primary w-full`}
+                  disabled={status === "pending" || !price || !programme}
                 >
-                  {isSubmitting
+                  {status === "pending"
                     ? "Submitting..."
                     : `Proceed to Checkout ₦${price}`}
                 </button>
@@ -288,18 +215,6 @@ const Join = () => {
                     </p>
                   </div>
                 </div>
-
-                {/* <div className="flex">
-                  <div className="flex-shrink-0 mt-1">
-                    <Check className="h-5 w-5 text-primary" />
-                  </div>
-                  <div className="ml-3">
-                    <h3 className="text-xl font-medium mb-2">Tailored Recommendations</h3>
-                    <p className="text-primary/80">
-                      Receive personalized content and resource recommendations based on your interests and goals.
-                    </p>
-                  </div>
-                </div> */}
               </div>
 
               <div className="mt-10 p-6 bg-nude-100 rounded-lg">
