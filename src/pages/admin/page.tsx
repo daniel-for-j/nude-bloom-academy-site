@@ -1,18 +1,20 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus, Book, Users, GraduationCap, Mail } from "lucide-react";
+import { Plus, Book, Users, GraduationCap, Mail, User } from "lucide-react";
 import { BlogManager } from "./components/BlogManager";
 import { WorkshopManager } from "./components/WorkshopManager";
 import { CourseManager } from "./components/CourseManager";
 import { NewsletterManager } from "./components/NewsLetterManager";
+import { UsersManager } from "./components/UsersManager";
 
 export type AdminSection =
   | "dashboard"
   | "blogs"
   | "workshops"
   | "courses"
-  | "newsletter";
+  | "newsletter"
+  | "users";
 
 const Admin = () => {
   const [activeSection, setActiveSection] = useState<AdminSection>("dashboard");
@@ -23,6 +25,7 @@ const Admin = () => {
     { id: "workshops", label: "Workshops", icon: Users },
     { id: "courses", label: "Courses", icon: GraduationCap },
     { id: "newsletter", label: "Newsletter", icon: Mail },
+    { id: "users", label: "Users", icon: User },
   ];
 
   const renderContent = () => {
@@ -35,6 +38,8 @@ const Admin = () => {
         return <CourseManager />;
       case "newsletter":
         return <NewsletterManager />;
+      case "users":
+        return <UsersManager />;
       default:
         return (
           <div className="space-y-6">
@@ -47,7 +52,7 @@ const Admin = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
               <Card
                 className="hover-lift cursor-pointer"
                 onClick={() => setActiveSection("blogs")}
@@ -108,6 +113,21 @@ const Admin = () => {
                 <CardContent>
                   <p className="text-xs text-muted-foreground">
                     Compose newsletters
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card
+                className="hover-lift cursor-pointer"
+                onClick={() => setActiveSection("users")}
+              >
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Users</CardTitle>
+                  <User className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <p className="text-xs text-muted-foreground">
+                    View registered users
                   </p>
                 </CardContent>
               </Card>

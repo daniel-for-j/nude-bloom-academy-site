@@ -215,3 +215,33 @@ export async function sendNewsLetter(data: { subject: string; text: string }) {
       throw error;
     });
 }
+
+export async function getUsers() {
+  return api
+    .get("/user")
+    .then((response) => {
+      console.log(response.data);
+      return response.data;
+    })
+    .catch((error) => {
+      console.log(error.data);
+      return error;
+    });
+}
+
+export async function editPrice(data: { price: number }) {
+  const token = sessionStorage.getItem("token");
+  return api
+    .put(`/admin/price/684c394133c6f5a438b54af0`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((response) => {
+      console.log(response);
+      return response.data;
+    })
+    .catch((error) => {
+      throw error;
+    });
+}

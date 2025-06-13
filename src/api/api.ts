@@ -70,3 +70,15 @@ export async function register(data: {
       throw error;
     });
 }
+
+export async function getPrice() {
+  return api
+    .get("/user/price")
+    .then((response) => {
+      console.log(response.data);
+      return response.data;
+    })
+    .catch((error) => {
+      throw error;
+    });
+}

@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getCourses, getWorkshops } from "@/api/api";
 import CourseCard from "./components/course-card";
 import WorkshopCard from "./components/workshop-card";
+import { getPrice } from "@/api/api";
 
 // Offer data
 const offerData = {
@@ -181,6 +182,12 @@ const AcademyItem = () => {
     refetchOnWindowFocus: false,
     staleTime: 300000,
   });
+  const { data: coachingPrice, status: getPriceStatus } = useQuery({
+    queryKey: ["price"],
+    queryFn: getPrice,
+    refetchOnWindowFocus: false,
+    staleTime: 300000,
+  });
   const { type = "" } = useParams<{ type: string }>();
   const [offerType, setOfferType] = useState<keyof typeof offerData | null>(
     null
@@ -295,17 +302,18 @@ const AcademyItem = () => {
           {offerType === "coaching" && (
             <div className="flex justify-center min-w-96">
               <button
+                disabled={getPriceStatus === "pending"}
                 onClick={() =>
                   navigate("/join", {
                     state: {
-                      price: 500,
+                      price: coachingPrice.price,
                       programme: "coaching",
                     },
                   })
                 }
                 className="btn-primary min-w-96"
               >
-                Enroll
+                {getPriceStatus === "pending" ? "Loading" : "Enroll"}
               </button>
             </div>
           )}
