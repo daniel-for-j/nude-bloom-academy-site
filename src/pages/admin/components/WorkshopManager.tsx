@@ -11,12 +11,13 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { Plus, Edit, Trash2, Users } from "lucide-react";
+import { Plus, Edit, Users } from "lucide-react";
 import { Workshop } from "../types";
 import { getWorkshops } from "@/api/api";
 import { addWorkshop, editWorkshop } from "@/api/admin";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import WorkshopCard from "./WorkshopCard";
 
 export const WorkshopManager = () => {
   const { toast } = useToast();
@@ -269,47 +270,7 @@ export const WorkshopManager = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {workshopState &&
           workshopState.length > 0 &&
-          workshopState.map((workshop) => (
-            <Card key={workshop._id} className="hover-lift">
-              <CardHeader>
-                {workshop.thumbnailUrl && (
-                  <img
-                    src={workshop.thumbnailUrl}
-                    alt={workshop.name}
-                    className="w-full h-40 object-cover rounded-md mb-4"
-                  />
-                )}
-                <CardTitle className="line-clamp-2">{workshop.name}</CardTitle>
-                <div className="flex items-center justify-between text-sm text-muted-foreground">
-                  <span>{new Date(workshop.date).toLocaleDateString()}</span>
-                  <span className="font-semibold text-primary">
-                    ₦{workshop.price}
-                  </span>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground line-clamp-2 mb-4">
-                  {workshop.details}
-                </p>
-                <div className="flex items-center gap-2 mb-4 text-sm">
-                  <Users className="h-4 w-4" />
-                  <span>
-                    {workshop.participants.length}/{workshop.maxNumber}{" "}
-                    participants
-                  </span>
-                </div>
-                <div className="flex gap-2">
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => handleEdit(workshop)}
-                  >
-                    <Edit className="h-4 w-4" />
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+          workshopState.map((workshop) => <WorkshopCard workshop={workshop} />)}
       </div>
     </div>
   );
