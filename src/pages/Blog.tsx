@@ -23,6 +23,7 @@ const Blog = () => {
     queryKey: ["blogs"],
     queryFn: getBlogs,
     refetchOnWindowFocus: false,
+    staleTime: 300000,
   });
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All Categories");

@@ -29,6 +29,7 @@ export const WorkshopManager = () => {
     queryKey: ["workshop"],
     refetchOnWindowFocus: false,
     refetchOnMount: false,
+    staleTime: 300000,
   });
 
   const { mutateAsync: addMutate, status: addStatus } = useMutation({

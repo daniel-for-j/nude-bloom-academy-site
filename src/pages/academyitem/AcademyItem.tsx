@@ -12,6 +12,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { getCourses, getWorkshops } from "@/api/api";
 import CourseCard from "./components/course-card";
+import WorkshopCard from "./components/workshop-card";
 
 // Offer data
 const offerData = {
@@ -178,11 +179,13 @@ const AcademyItem = () => {
     queryKey: ["courses"],
     queryFn: getCourses,
     refetchOnWindowFocus: false,
+    staleTime: 300000,
   });
   const workshops = useQuery({
     queryKey: ["workshops"],
     queryFn: getWorkshops,
     refetchOnWindowFocus: false,
+    staleTime: 300000,
   });
   const { type = "" } = useParams<{ type: string }>();
   const [offerType, setOfferType] = useState<keyof typeof offerData | null>(
@@ -313,39 +316,19 @@ const AcademyItem = () => {
               </h3>
               <div className="space-y-4">
                 {workshops.data &&
-                  workshops.data.data.map((workshop, index) => (
-                    <div
-                      key={index}
-                      className="bg-white p-6 rounded-lg shadow-sm border border-nude-200"
-                    >
-                      <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-                        <div>
-                          <h4 className="text-xl font-medium mb-2">
-                            {workshop.name}
-                          </h4>
-                          <div className="flex flex-col sm:flex-row sm:space-x-8">
-                            <div className="flex items-center text-primary/70 mb-2 sm:mb-0">
-                              <Calendar size={18} className="mr-2" />
-                              <span>{workshop.date}</span>
-                            </div>
-                          </div>
-                          <div className="mt-2 text-sm text-primary/70">
-                            {""}
-                          </div>
-                        </div>
-                        <div className="mt-4 md:mt-0 flex items-center">
-                          <div className="text-2xl font-serif font-medium mr-4">
-                            ₦{workshop.price}
-                          </div>
-                          <button
-                            onClick={() => navigate("/join")}
-                            className="btn-primary"
-                          >
-                            Register
-                          </button>
-                        </div>
-                      </div>
-                    </div>
+                  workshops.data.data.map((workshop) => (
+                    <WorkshopCard
+                      workshop={workshop}
+                      onRegister={() =>
+                        navigate(`/join/`, {
+                          state: {
+                            price: workshop.price,
+                            programme: "workshop",
+                          },
+                        })
+                      }
+                      key={workshop._id}
+                    />
                   ))}
               </div>
             </div>

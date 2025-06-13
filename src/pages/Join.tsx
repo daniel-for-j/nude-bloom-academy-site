@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import PageHeader from "../components/PageHeader";
 import { Check } from "lucide-react";
+import { useLocation } from "react-router-dom";
 
 type FormData = {
   firstName: string;
@@ -20,6 +21,8 @@ const Join = () => {
     reset,
   } = useForm<FormData>();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const location = useLocation();
+  const { price, programme } = location.state || {};
 
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
@@ -52,8 +55,8 @@ const Join = () => {
                 Stay Connected
               </h2>
               <p className="text-primary/80 mb-8">
-                Fill out the form below to join our community and receive
-                updates on our latest offers, events, and resources.
+                Fill out the form below to be part of the {programme} programme
+                and receive updates on our latest offers, events, and resources.
               </p>
 
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -212,9 +215,11 @@ const Join = () => {
                 <button
                   type="submit"
                   className="btn-primary w-full"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || !price || !programme}
                 >
-                  {isSubmitting ? "Submitting..." : "Proceed to Checkout"}
+                  {isSubmitting
+                    ? "Submitting..."
+                    : `Proceed to Checkout ₦${price}`}
                 </button>
               </form>
             </div>

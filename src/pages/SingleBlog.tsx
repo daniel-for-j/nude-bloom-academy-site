@@ -10,6 +10,7 @@ export default function BlogPost() {
     queryFn: () => getBlog(id),
     queryKey: ["blog", id],
     refetchOnWindowFocus: false,
+    staleTime: 300000,
   });
 
   return (
