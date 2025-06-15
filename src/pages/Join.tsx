@@ -21,7 +21,7 @@ const Join = () => {
     reset,
   } = useForm<FormData>();
   const location = useLocation();
-  const { price, programme, workshopID } = location.state || {};
+  const { price, programme, workshopID, workshopDate } = location.state || {};
   const { mutateAsync: mutate, status } = useMutation({
     mutationFn: registerApi,
     onError: (err) => {
@@ -42,6 +42,7 @@ const Join = () => {
       ...data,
       programme: programme,
       workshopID: workshopID ? workshopID : undefined,
+      workshopDate: workshopDate ? workshopDate : undefined,
     });
 
     reset();

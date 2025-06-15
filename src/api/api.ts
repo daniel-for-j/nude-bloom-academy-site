@@ -57,6 +57,7 @@ export async function register(data: {
   email: string;
   programme: "workshop" | "coaching";
   workshopID?: string;
+  workshopDate?: string;
   userMessage?: string;
 }) {
   return api

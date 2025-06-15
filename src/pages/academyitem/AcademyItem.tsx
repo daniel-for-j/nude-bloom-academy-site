@@ -334,6 +334,7 @@ const AcademyItem = () => {
                             price: workshop.price,
                             programme: "workshop",
                             workshopID: workshop._id,
+                            workshopDate: workshop.date,
                           },
                         })
                       }
