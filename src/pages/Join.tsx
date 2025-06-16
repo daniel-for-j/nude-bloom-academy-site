@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import PageHeader from "../components/PageHeader";
 import { Check } from "lucide-react";
-import { useLocation } from "react-router-dom";
-import { register as registerApi } from "@/api/api";
+import { useLocation, useSearchParams } from "react-router-dom";
+import {
+  register as registerApi,
+  handlePayment,
+  verifyPayment,
+} from "@/api/api";
 import { useMutation } from "@tanstack/react-query";
 
 type FormData = {
@@ -31,13 +35,55 @@ const Join = () => {
       throw err;
     },
     onSuccess: (data) => {
+      localStorage.removeItem("registrationData");
       toast.success("Success", {
         description: data.message,
       });
     },
   });
+  const { mutate: verifymutate, status: verifyStatus } = useMutation({
+    mutationFn: verifyPayment,
+    onSuccess: () => {
+      handleRegister(JSON.parse(localStorage.getItem("registrationData")));
+    },
+    onError: () =>
+      toast.success("Error", {
+        description: "Payment Verification Failed",
+      }),
+  });
+  const [searchParams] = useSearchParams();
+  useEffect(() => {
+    if (searchParams.get("reference")) {
+      verifymutate(searchParams.get("reference"));
+    }
+  }, []);
+
+  const { mutate: paymentMutate, status: paymentMutateStatus } = useMutation({
+    mutationFn: handlePayment,
+    onSuccess: (data) => {
+      toast.success("Success", {
+        description: "Redirecting to payment gateway",
+      });
+      window.location.href = data.data.authorization_url;
+    },
+    onError: () => {
+      toast.success("Error", {
+        description: "Something went wrong. Please try again",
+      });
+    },
+  });
 
   const onSubmit = async (data: FormData) => {
+    localStorage.setItem("registrationData", JSON.stringify(data));
+    paymentMutate({
+      email: data.email,
+      amount: `${100}00`,
+    });
+
+    reset();
+  };
+
+  const handleRegister = async (data: FormData) => {
     await mutate({
       ...data,
       programme: programme,
@@ -142,12 +188,16 @@ const Join = () => {
 
                 <button
                   type="submit"
-                  className={`disabled:bg-green-600 btn-primary w-full`}
-                  disabled={status === "pending" || !price || !programme}
+                  className={`btn-primary w-full`}
+                  disabled={
+                    paymentMutateStatus === "pending" || !price || !programme
+                  }
                 >
                   {status === "pending"
                     ? "Submitting..."
-                    : `Proceed to Checkout ₦${price}`}
+                    : verifyStatus === "pending"
+                    ? "Verifying Payment"
+                    : `Proceed to Checkout ₦${price != undefined ? price : ""}`}
                 </button>
               </form>
             </div>

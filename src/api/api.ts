@@ -83,3 +83,27 @@ export async function getPrice() {
       throw error;
     });
 }
+
+export async function handlePayment(data: { email: string; amount: string }) {
+  return api
+    .post("/payment", data)
+    .then((res) => {
+      console.log(res);
+      return res.data;
+    })
+    .catch((err) => {
+      throw err;
+    });
+}
+
+export async function verifyPayment(ref: string) {
+  return api
+    .post("/payment/verify", { reference: ref })
+    .then((res) => {
+      console.log(res);
+      return res.data;
+    })
+    .catch((err) => {
+      throw err;
+    });
+}
