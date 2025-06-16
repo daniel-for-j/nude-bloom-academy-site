@@ -5,6 +5,15 @@ export const api = axios.create({
   timeout: 80000,
 });
 
+export interface registerType {
+  name: string;
+  email: string;
+  programme: "workshop" | "coaching";
+  workshopID?: string;
+  workshopDate?: string;
+  userMessage?: string;
+}
+
 export async function getBlogs() {
   return api
     .get("/blogs/")
@@ -52,14 +61,7 @@ export async function getBlog(blogId: string) {
   return response;
 }
 
-export async function register(data: {
-  name: string;
-  email: string;
-  programme: "workshop" | "coaching";
-  workshopID?: string;
-  workshopDate?: string;
-  userMessage?: string;
-}) {
+export async function register(data: registerType) {
   return api
     .post("/user", data)
     .then((response) => {

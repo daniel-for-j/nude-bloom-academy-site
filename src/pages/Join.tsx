@@ -8,6 +8,7 @@ import {
   register as registerApi,
   handlePayment,
   verifyPayment,
+  registerType,
 } from "@/api/api";
 import { useMutation } from "@tanstack/react-query";
 
@@ -15,6 +16,7 @@ type FormData = {
   name: string;
   email: string;
   userMessage?: string;
+  programme: string;
 };
 
 const Join = () => {
@@ -74,7 +76,15 @@ const Join = () => {
   });
 
   const onSubmit = async (data: FormData) => {
-    localStorage.setItem("registrationData", JSON.stringify(data));
+    localStorage.setItem(
+      "registrationData",
+      JSON.stringify({
+        ...data,
+        programme: programme,
+        workshopID: workshopID ? workshopID : undefined,
+        workshopDate: workshopDate ? workshopDate : undefined,
+      })
+    );
     paymentMutate({
       email: data.email,
       amount: `${100}00`,
@@ -83,14 +93,8 @@ const Join = () => {
     reset();
   };
 
-  const handleRegister = async (data: FormData) => {
-    await mutate({
-      ...data,
-      programme: programme,
-      workshopID: workshopID ? workshopID : undefined,
-      workshopDate: workshopDate ? workshopDate : undefined,
-    });
-
+  const handleRegister = async (data: registerType) => {
+    await mutate(data);
     reset();
   };
 
