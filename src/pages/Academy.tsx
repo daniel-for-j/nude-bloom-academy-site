@@ -207,81 +207,40 @@ const Academy = () => {
       {/* Testimonials */}
       <section className="py-16 bg-nude-100">
         <div className="container-custom">
-          <h2 className="section-title text-center mb-12">
-            What Our Students Say
-          </h2>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-nude-300 rounded-full overflow-hidden mr-4">
-                  <img
-                    src="https://randomuser.me/api/portraits/women/24.jpg"
-                    alt="Testimonial"
-                    className="w-full h-full object-cover"
-                  />
+          {testimonials?.Testimonials && (
+            <>
+              <h2 className="section-title text-center mb-12">
+                What Our Students Say
+              </h2>
+              {testimonials.Testimonials.map((test) => (
+                <div className="grid md:grid-cols-3 gap-8" key={test._id}>
+                  <div className="bg-white p-6 rounded-lg shadow-sm">
+                    <div className="flex items-center mb-4">
+                      <div className="w-12 h-12 bg-nude-300 rounded-full overflow-hidden mr-4">
+                        <img
+                          src={test.thumbnailUrl}
+                          alt="Testimonial"
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div>
+                        <h4 className="font-medium">{test.name}</h4>
+                        <p className="text-sm text-primary/70">
+                          {test.programme}
+                        </p>
+                      </div>
+                    </div>
+                    <p className="text-primary/80 italic">{`"${test.body}"`}</p>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="font-medium">Rebecca Thompson</h4>
-                  <p className="text-sm text-primary/70">One-on-One Coaching</p>
-                </div>
-              </div>
-              <p className="text-primary/80 italic">
-                "The one-on-one coaching sessions have been transformative. My
-                coach understood exactly what I needed and helped me create a
-                personalized growth plan that has already yielded fantastic
-                results."
-              </p>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-nude-300 rounded-full overflow-hidden mr-4">
-                  <img
-                    src="https://randomuser.me/api/portraits/men/47.jpg"
-                    alt="Testimonial"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div>
-                  <h4 className="font-medium">Marcus Johnson</h4>
-                  <p className="text-sm text-primary/70">Group Workshops</p>
-                </div>
-              </div>
-              <p className="text-primary/80 italic">
-                "The group workshops provided not just expert guidance but also
-                a supportive community. The diverse perspectives and shared
-                experiences made the learning journey incredibly enriching."
-              </p>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-nude-300 rounded-full overflow-hidden mr-4">
-                  <img
-                    src="https://randomuser.me/api/portraits/women/63.jpg"
-                    alt="Testimonial"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div>
-                  <h4 className="font-medium">Sophia Chen</h4>
-                  <p className="text-sm text-primary/70">Online Courses</p>
-                </div>
-              </div>
-              <p className="text-primary/80 italic">
-                "The online courses are comprehensive and well-structured. Being
-                able to learn at my own pace while still having access to
-                community support made it the perfect learning experience for my
-                busy schedule."
-              </p>
-            </div>
-          </div>
+              ))}
+            </>
+          )}
         </div>
       </section>
 
       {/* CTA */}
-      <section className="py-16 bg-primary text-white">
+      {/* <section className="py-16 bg-primary text-white">
         <div className="container-custom text-center">
           <h2 className="text-3xl md:text-4xl font-serif font-medium mb-6">
             Ready to Begin Your Growth Journey?
@@ -305,7 +264,7 @@ const Academy = () => {
             </a>
           </div>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 };
