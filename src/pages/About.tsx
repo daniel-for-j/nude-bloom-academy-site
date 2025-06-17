@@ -16,16 +16,25 @@ const About = () => {
                 Our Mission
               </h2>
               <p className="text-lg text-primary/80 mb-6">
-                At SOAR Community, we believe in the transformative power of
-                education, support, and community. Our mission is to empower
-                individuals to reach their highest potential by providing them
-                with the tools, resources, and connections necessary for
-                personal and professional growth.
+                SOAR Community is a personal growth and empowerment platform
+                dedicated to helping individuals build unshakable confidence and
+                develop powerful communication skills that amplify their voice
+                and purpose. Through relatable content, coaching, group
+                workshops, and a vibrant online presence, we’re on a mission to
+                see people rise up bold, self-aware, and ready to lead in their
+                own space. Broken down into the SOAR Academy, Blog, Podcast, and
+                the Community at large, we create resources and experiences that
+                empower young adults to face fear, own their identity, and
+                communicate with clarity.
               </p>
               <p className="text-lg text-primary/80">
-                We strive to create a nurturing environment where members can
-                learn, share experiences, and build meaningful relationships
-                that foster continuous development and success.
+                Our mission is to provide the knowledge, support, and practical
+                strategies needed to overcome inner barriers. Whether you’re
+                preparing for a major event, aiming to excel professionally, or
+                simply want to show up with more confidence in everyday life —
+                we’re here to walk that journey with you. At SOAR Community, we
+                believe the future is yours to create. And your voice is the
+                key.
               </p>
             </div>
             <div className="rounded-lg overflow-hidden shadow-md">
