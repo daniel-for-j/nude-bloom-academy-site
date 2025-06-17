@@ -68,15 +68,6 @@ const Navbar = () => {
               </li>
               <li>
                 <Link
-                  to="/join"
-                  className="nav-link block py-2"
-                  onClick={toggleMenu}
-                >
-                  Join Us
-                </Link>
-              </li>
-              <li>
-                <Link
                   to="/blog"
                   className="nav-link block py-2"
                   onClick={toggleMenu}
