@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import PageHeader from "../components/PageHeader";
 import { Users, User, BookOpen, ArrowRight, CheckCircle } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { getPrice } from "@/api/api";
+import { getTestimonies } from "@/api/api";
 
 // Offer types
 type Offer = {
@@ -20,9 +20,9 @@ type Offer = {
 
 const Academy = () => {
   const [activeTab, setActiveTab] = useState<string>("all");
-  const { data: coachingPrice, status: getPriceStatus } = useQuery({
-    queryKey: ["price"],
-    queryFn: getPrice,
+  const { data: testimonials, status: testimonialStatus } = useQuery({
+    queryKey: ["monials"],
+    queryFn: getTestimonies,
     refetchOnWindowFocus: false,
     staleTime: 300000,
   });
@@ -205,7 +205,7 @@ const Academy = () => {
       </section>
 
       {/* Testimonials */}
-      {/* <section className="py-16 bg-nude-100">
+      <section className="py-16 bg-nude-100">
         <div className="container-custom">
           <h2 className="section-title text-center mb-12">
             What Our Students Say
@@ -278,7 +278,7 @@ const Academy = () => {
             </div>
           </div>
         </div>
-      </section> */}
+      </section>
 
       {/* CTA */}
       <section className="py-16 bg-primary text-white">

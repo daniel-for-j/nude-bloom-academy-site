@@ -315,7 +315,7 @@ const AcademyItem = () => {
                   ? "Loading"
                   : getPriceStatus === "error"
                   ? "Something went wrong"
-                  : `Enroll ₦${coachingPrice}`}
+                  : `Enroll ₦${Number(coachingPrice.price).toLocaleString()}`}
               </button>
             </div>
           )}

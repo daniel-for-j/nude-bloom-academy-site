@@ -120,3 +120,14 @@ export async function addTestimonial(data: {
       throw error.response.data;
     });
 }
+
+export async function getTestimonies() {
+  return api
+    .get("/user/testimonial")
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      throw error.data;
+    });
+}
