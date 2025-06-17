@@ -29,33 +29,37 @@ export default function BlogPost() {
               Blog
             </Link>
             <span className="mx-2">/</span>
-            <span className="text-gray-700">{post.title}</span>
+            <span className="text-gray-700">{post?.title}</span>
           </div>
 
           {/* Post Header */}
-          <div className="mb-8">
-            <h1 className="text-4xl font-serif font-medium mb-4">
-              {post.title}
-            </h1>
+          {post != undefined && (
+            <div className="mb-8">
+              <h1 className="text-4xl font-serif font-medium mb-4">
+                {post?.title}
+              </h1>
 
-            <div className="flex items-center space-x-6 text-sm text-gray-500 mb-6">
-              <div className="flex items-center">
-                <CalendarIcon className="h-4 w-4 mr-2" />
-                <span>{post.createdAt.split("T")[0]}</span>
-              </div>
+              <div className="flex items-center space-x-6 text-sm text-gray-500 mb-6">
+                <div className="flex items-center">
+                  <CalendarIcon className="h-4 w-4 mr-2" />
+                  <span>{post?.createdAt.split("T")[0]}</span>
+                </div>
 
-              <div className="flex items-center">
-                <Tag className="h-4 w-4 mr-2" />
-                <span>{post.category}</span>
+                <div className="flex items-center">
+                  <Tag className="h-4 w-4 mr-2" />
+                  <span>{post?.category}</span>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
           {/* Featured Image */}
           <div className="mb-10 rounded-lg overflow-hidden">
             <Img
-              src={(post.thumbnail && post.thumbnail) || "/placeholder.svg"}
-              alt={post.title}
+              src={
+                (post?.thumbnailUrl && post?.thumbnailUrl) || "/placeholder.svg"
+              }
+              alt={post?.title}
               width={800}
               height={450}
               className="w-full h-auto object-cover"
@@ -65,7 +69,7 @@ export default function BlogPost() {
           {/* Post Content */}
           <div
             className="prose max-w-none"
-            dangerouslySetInnerHTML={{ __html: post.body }}
+            dangerouslySetInnerHTML={{ __html: post?.body }}
           />
         </div>
       )}

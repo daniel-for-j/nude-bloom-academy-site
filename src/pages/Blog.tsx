@@ -94,7 +94,7 @@ const Blog = () => {
                   className="bg-white rounded-lg overflow-hidden shadow-sm card-hover"
                 >
                   <img
-                    src={post.thumbnail}
+                    src={post.thumbnailUrl}
                     alt={post.title}
                     className="w-full h-48 object-cover"
                   />
