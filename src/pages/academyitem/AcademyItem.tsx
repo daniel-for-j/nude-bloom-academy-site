@@ -323,6 +323,7 @@ const AcademyItem = () => {
               </h3>
               <div className="space-y-4">
                 {workshops.data &&
+                  workshops.data.data?.length > 0 &&
                   workshops.data.data.map((workshop) => (
                     <WorkshopCard
                       workshop={workshop}
@@ -349,7 +350,7 @@ const AcademyItem = () => {
                 Available Courses
               </h3>
               <div className="space-y-6">
-                {courses.data &&
+                {courses.data?.data &&
                   courses.data.data.map((course) => (
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                       <CourseCard key={course._id} course={course} />
