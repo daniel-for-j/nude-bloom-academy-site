@@ -98,3 +98,25 @@ export async function verifyPayment(ref: string) {
       throw err;
     });
 }
+
+export async function addTestimonial(data: {
+  name: string;
+  email: string;
+  programme: string;
+  body: string;
+  thumbnail?: File | null;
+}) {
+  return api
+    .post("/user/testimonial", data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    .then((response) => {
+      console.log(response.data);
+      return response.data;
+    })
+    .catch((error) => {
+      throw error.response.data;
+    });
+}

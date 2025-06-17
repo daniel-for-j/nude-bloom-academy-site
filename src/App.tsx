@@ -17,6 +17,7 @@ import BlogPost from "./pages/SingleBlog";
 import Admin from "./pages/admin/page";
 import AdminLoginPage from "./pages/login/page";
 import ProtectedRoute from "./components/protectedRoutes";
+import Testimonial from "./pages/testimonials/Testimonial";
 
 const queryClient = new QueryClient();
 
@@ -41,6 +42,7 @@ const App = () => {
                 <Route path="/academy" element={<Academy />} />
                 <Route path="/academy/:type" element={<AcademyItem />} />
                 <Route path="*" element={<NotFound />} />
+                <Route path="/testimonial" element={<Testimonial />} />
 
                 <Route
                   path="/admin"

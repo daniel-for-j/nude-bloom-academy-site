@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, BookOpen, Users, Presentation } from "lucide-react";
+import { ArrowRight, BookOpen, Users, Presentation, Star } from "lucide-react";
 
 const Home = () => {
   return (
@@ -15,7 +15,7 @@ const Home = () => {
             </h1>
             <p className="text-xl md:text-2xl text-primary/80 mb-8 animate-fade-in">
               Unlock your full potential, build unshakable confidence and master
-              the art of communication.
+              the art of communication.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/about" className="btn-primary">
@@ -50,26 +50,6 @@ const Home = () => {
               </Link>
             </div>
 
-            {/* Community */}
-            {/* <div className="bg-white p-8 rounded-lg shadow-sm card-hover">
-              <div className="w-12 h-12 bg-nude-200 rounded-full flex items-center justify-center mb-6">
-                <Users className="text-primary" size={24} />
-              </div>
-              <h3 className="text-2xl font-serif font-medium mb-4">
-                Community
-              </h3>
-              <p className="text-primary/70 mb-6">
-                Connect with a supportive network of individuals sharing similar
-                goals and aspirations.
-              </p>
-              <Link
-                to="/join"
-                className="inline-flex items-center text-primary font-medium"
-              >
-                Join Us <ArrowRight size={16} className="ml-2" />
-              </Link>
-            </div> */}
-
             {/* Resources */}
             <div className="bg-white p-8 rounded-lg shadow-sm card-hover">
               <div className="w-12 h-12 bg-nude-200 rounded-full flex items-center justify-center mb-6">
@@ -87,25 +67,27 @@ const Home = () => {
                 Read Articles <ArrowRight size={16} className="ml-2" />
               </Link>
             </div>
+
+            {/* Reviews */}
+            <div className="bg-white p-8 rounded-lg shadow-sm card-hover">
+              <div className="w-12 h-12 bg-nude-200 rounded-full flex items-center justify-center mb-6">
+                <Star className="text-primary" size={24} />
+              </div>
+              <h3 className="text-2xl font-serif font-medium mb-4">Reviews</h3>
+              <p className="text-primary/70 mb-6">
+                Share your experience and read testimonials from our community
+                members who have transformed their lives through our courses.
+              </p>
+              <Link
+                to="/testimonial"
+                className="inline-flex items-center text-primary font-medium"
+              >
+                Leave a Review <ArrowRight size={16} className="ml-2" />
+              </Link>
+            </div>
           </div>
         </div>
       </section>
-
-      {/* CTA Section */}
-      {/* <section className="py-20 bg-nude-200">
-        <div className="container-custom text-center">
-          <h2 className="section-title mb-6">
-            Ready to Transform Your Journey?
-          </h2>
-          <p className="text-xl text-primary/80 max-w-2xl mx-auto mb-8">
-            Join our community today and unlock exclusive access to resources,
-            events, and a network of like-minded individuals.
-          </p>
-          <Link to="/join" className="btn-primary">
-            Get Started
-          </Link>
-        </div>
-      </section> */}
     </div>
   );
 };
