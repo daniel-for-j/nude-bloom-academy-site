@@ -7,7 +7,7 @@ export async function login(data: { username: string; password: string }) {
       return response.data;
     })
     .catch((error) => {
-      throw error;
+      throw error.data;
     });
 }
 

@@ -1,12 +1,21 @@
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus, Book, Users, GraduationCap, Mail, User } from "lucide-react";
+import {
+  Plus,
+  Book,
+  Users,
+  GraduationCap,
+  Mail,
+  User,
+  Menu,
+} from "lucide-react";
 import { BlogManager } from "./components/BlogManager";
 import { WorkshopManager } from "./components/WorkshopManager";
 import { CourseManager } from "./components/CourseManager";
 import { NewsletterManager } from "./components/NewsLetterManager";
 import { UsersManager } from "./components/UsersManager";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 export type AdminSection =
   | "dashboard"
@@ -18,6 +27,7 @@ export type AdminSection =
 
 const Admin = () => {
   const [activeSection, setActiveSection] = useState<AdminSection>("dashboard");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const sidebarItems = [
     { id: "dashboard", label: "Dashboard", icon: GraduationCap },
@@ -27,6 +37,42 @@ const Admin = () => {
     { id: "newsletter", label: "Newsletter", icon: Mail },
     { id: "users", label: "Users", icon: User },
   ];
+
+  const handleSectionChange = (section: AdminSection) => {
+    setActiveSection(section);
+    setSidebarOpen(false); // Close sidebar on mobile after selection
+  };
+
+  const SidebarContent = () => (
+    <>
+      <div className="p-4 lg:p-6">
+        <h2 className="text-xl lg:text-2xl font-bold text-primary">
+          SOAR Academy
+        </h2>
+        <p className="text-sm text-muted-foreground">Admin Panel</p>
+      </div>
+
+      <nav className="mt-4 lg:mt-6">
+        {sidebarItems.map((item) => {
+          const Icon = item.icon;
+          return (
+            <button
+              key={item.id}
+              onClick={() => handleSectionChange(item.id as AdminSection)}
+              className={`w-full flex items-center px-4 lg:px-6 py-3 text-left transition-colors ${
+                activeSection === item.id
+                  ? "bg-primary text-primary-foreground border-r-2 border-primary"
+                  : "text-muted-foreground hover:text-foreground hover:bg-accent"
+              }`}
+            >
+              <Icon className="mr-3 h-4 lg:h-5 w-4 lg:w-5" />
+              <span className="text-sm lg:text-base">{item.label}</span>
+            </button>
+          );
+        })}
+      </nav>
+    </>
+  );
 
   const renderContent = () => {
     switch (activeSection) {
@@ -42,9 +88,9 @@ const Admin = () => {
         return <UsersManager />;
       default:
         return (
-          <div className="space-y-6">
-            <div className="flex items-center justify-between">
-              <h1 className="text-3xl font-bold text-foreground">
+          <div className="space-y-4 lg:space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <h1 className="text-2xl lg:text-3xl font-bold text-foreground">
                 Admin Dashboard
               </h1>
               <div className="text-sm text-muted-foreground">
@@ -52,10 +98,11 @@ const Admin = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+            {/* Dashboard Cards Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 lg:gap-6">
               <Card
-                className="hover-lift cursor-pointer"
-                onClick={() => setActiveSection("blogs")}
+                className="hover-lift cursor-pointer transition-transform hover:scale-105"
+                onClick={() => handleSectionChange("blogs")}
               >
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">Blogs</CardTitle>
@@ -69,8 +116,8 @@ const Admin = () => {
               </Card>
 
               <Card
-                className="hover-lift cursor-pointer"
-                onClick={() => setActiveSection("workshops")}
+                className="hover-lift cursor-pointer transition-transform hover:scale-105"
+                onClick={() => handleSectionChange("workshops")}
               >
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">
@@ -86,8 +133,8 @@ const Admin = () => {
               </Card>
 
               <Card
-                className="hover-lift cursor-pointer"
-                onClick={() => setActiveSection("courses")}
+                className="hover-lift cursor-pointer transition-transform hover:scale-105"
+                onClick={() => handleSectionChange("courses")}
               >
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">Courses</CardTitle>
@@ -101,8 +148,8 @@ const Admin = () => {
               </Card>
 
               <Card
-                className="hover-lift cursor-pointer"
-                onClick={() => setActiveSection("newsletter")}
+                className="hover-lift cursor-pointer transition-transform hover:scale-105"
+                onClick={() => handleSectionChange("newsletter")}
               >
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">
@@ -118,8 +165,8 @@ const Admin = () => {
               </Card>
 
               <Card
-                className="hover-lift cursor-pointer"
-                onClick={() => setActiveSection("users")}
+                className="hover-lift cursor-pointer transition-transform hover:scale-105"
+                onClick={() => handleSectionChange("users")}
               >
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">Users</CardTitle>
@@ -133,17 +180,20 @@ const Admin = () => {
               </Card>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Bottom Section Grid */}
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 lg:gap-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>Recent Activity</CardTitle>
+                  <CardTitle className="text-lg lg:text-xl">
+                    Recent Activity
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
                     <div className="flex items-center space-x-4">
-                      <div className="w-2 h-2 bg-primary rounded-full"></div>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium">
+                      <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0"></div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium truncate">
                           New blog post published
                         </p>
                         <p className="text-xs text-muted-foreground">
@@ -152,9 +202,9 @@ const Admin = () => {
                       </div>
                     </div>
                     <div className="flex items-center space-x-4">
-                      <div className="w-2 h-2 bg-primary rounded-full"></div>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium">
+                      <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0"></div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium truncate">
                           Workshop scheduled
                         </p>
                         <p className="text-xs text-muted-foreground">
@@ -163,9 +213,11 @@ const Admin = () => {
                       </div>
                     </div>
                     <div className="flex items-center space-x-4">
-                      <div className="w-2 h-2 bg-primary rounded-full"></div>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium">Course updated</p>
+                      <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0"></div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium truncate">
+                          Course updated
+                        </p>
                         <p className="text-xs text-muted-foreground">
                           1 day ago
                         </p>
@@ -177,37 +229,39 @@ const Admin = () => {
 
               <Card>
                 <CardHeader>
-                  <CardTitle>Quick Actions</CardTitle>
+                  <CardTitle className="text-lg lg:text-xl">
+                    Quick Actions
+                  </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="space-y-3 lg:space-y-4">
                   <Button
-                    className="w-full justify-start"
+                    className="w-full justify-start text-sm"
                     variant="outline"
-                    onClick={() => setActiveSection("blogs")}
+                    onClick={() => handleSectionChange("blogs")}
                   >
                     <Plus className="mr-2 h-4 w-4" />
                     Create New Blog Post
                   </Button>
                   <Button
-                    className="w-full justify-start"
+                    className="w-full justify-start text-sm"
                     variant="outline"
-                    onClick={() => setActiveSection("workshops")}
+                    onClick={() => handleSectionChange("workshops")}
                   >
                     <Plus className="mr-2 h-4 w-4" />
                     Schedule Workshop
                   </Button>
                   <Button
-                    className="w-full justify-start"
+                    className="w-full justify-start text-sm"
                     variant="outline"
-                    onClick={() => setActiveSection("courses")}
+                    onClick={() => handleSectionChange("courses")}
                   >
                     <Plus className="mr-2 h-4 w-4" />
                     Add New Course
                   </Button>
                   <Button
-                    className="w-full justify-start"
+                    className="w-full justify-start text-sm"
                     variant="outline"
-                    onClick={() => setActiveSection("newsletter")}
+                    onClick={() => handleSectionChange("newsletter")}
                   >
                     <Plus className="mr-2 h-4 w-4" />
                     Compose Newsletter
@@ -223,36 +277,35 @@ const Admin = () => {
   return (
     <div className="min-h-screen bg-background">
       <div className="flex">
-        {/* Sidebar */}
-        <div className="w-64 bg-card border-r border-border min-h-screen">
-          <div className="p-6">
-            <h2 className="text-2xl font-bold text-primary">SOAR Academy</h2>
-            <p className="text-sm text-muted-foreground">Admin Panel</p>
-          </div>
-
-          <nav className="mt-6">
-            {sidebarItems.map((item) => {
-              const Icon = item.icon;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => setActiveSection(item.id as AdminSection)}
-                  className={`w-full flex items-center px-6 py-3 text-left transition-colors ${
-                    activeSection === item.id
-                      ? "bg-primary text-primary-foreground border-r-2 border-primary"
-                      : "text-muted-foreground hover:text-foreground hover:bg-accent"
-                  }`}
-                >
-                  <Icon className="mr-3 h-5 w-5" />
-                  {item.label}
-                </button>
-              );
-            })}
-          </nav>
+        {/* Desktop Sidebar */}
+        <div className="hidden lg:block w-64 bg-card border-r border-border min-h-screen">
+          <SidebarContent />
         </div>
 
-        {/* Main Content */}
-        <div className="flex-1 p-8">{renderContent()}</div>
+        {/* Mobile Header & Content */}
+        <div className="flex-1 flex flex-col">
+          {/* Mobile Header */}
+          <div className="lg:hidden bg-card border-b border-border p-4 flex items-center justify-between">
+            <div>
+              <h2 className="text-lg font-bold text-primary">SOAR Academy</h2>
+              <p className="text-xs text-muted-foreground">Admin Panel</p>
+            </div>
+
+            <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
+              <SheetTrigger asChild>
+                <Button variant="outline" size="icon">
+                  <Menu className="h-4 w-4" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="w-64 p-0">
+                <SidebarContent />
+              </SheetContent>
+            </Sheet>
+          </div>
+
+          {/* Main Content */}
+          <div className="flex-1 p-4 lg:p-8">{renderContent()}</div>
+        </div>
       </div>
     </div>
   );

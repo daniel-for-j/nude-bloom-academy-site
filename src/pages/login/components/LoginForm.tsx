@@ -24,7 +24,7 @@ const LoginForm = () => {
       navigate("/admin");
     },
     onError: (data) => {
-      toast({ title: "Success", description: data.message });
+      toast({ title: "Error", description: data.message });
     },
   });
 
