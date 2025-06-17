@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import PageHeader from "../components/PageHeader";
 import { Users, User, BookOpen, ArrowRight, CheckCircle } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { getPrice } from "@/api/api";
 
 // Offer types
 type Offer = {
@@ -18,7 +20,12 @@ type Offer = {
 
 const Academy = () => {
   const [activeTab, setActiveTab] = useState<string>("all");
-
+  const { data: coachingPrice, status: getPriceStatus } = useQuery({
+    queryKey: ["price"],
+    queryFn: getPrice,
+    refetchOnWindowFocus: false,
+    staleTime: 300000,
+  });
   const offers: Offer[] = [
     {
       id: "one-on-one",
@@ -181,14 +188,7 @@ const Academy = () => {
                       ))}
                     </div>
 
-                    <div className="flex items-end gap-2 mb-6">
-                      <span className="text-3xl font-serif font-medium">
-                        {offer.price}
-                      </span>
-                      <span className="text-primary/70">
-                        {offer.priceDescription}
-                      </span>
-                    </div>
+                    <div className="flex items-end gap-2 mb-6"></div>
 
                     <Link
                       to={offer.link}
@@ -205,7 +205,7 @@ const Academy = () => {
       </section>
 
       {/* Testimonials */}
-      <section className="py-16 bg-nude-100">
+      {/* <section className="py-16 bg-nude-100">
         <div className="container-custom">
           <h2 className="section-title text-center mb-12">
             What Our Students Say
@@ -278,7 +278,7 @@ const Academy = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* CTA */}
       <section className="py-16 bg-primary text-white">

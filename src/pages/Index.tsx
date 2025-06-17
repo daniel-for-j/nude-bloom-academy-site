@@ -14,8 +14,8 @@ const Home = () => {
               Community
             </h1>
             <p className="text-xl md:text-2xl text-primary/80 mb-8 animate-fade-in">
-              Elevate your potential and connect with like-minded individuals on
-              a journey of growth and transformation.
+              Unlock your full potential, build unshakable confidence and master
+              the art of communication.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/about" className="btn-primary">

@@ -34,7 +34,7 @@ const offerData = {
     pricing: [
       {
         name: "Single Session",
-        price: "$199",
+        price: "",
         features: [
           "1-hour coaching session",
           "Session summary and action plan",
@@ -43,7 +43,7 @@ const offerData = {
       },
       {
         name: "Monthly Package",
-        price: "$649",
+        price: "",
         features: [
           "4 weekly sessions",
           "Email support between sessions",
@@ -54,7 +54,7 @@ const offerData = {
       },
       {
         name: "Quarterly Package",
-        price: "$1,799",
+        price: "",
         features: [
           "12 sessions (1 per week)",
           "Priority scheduling",
@@ -92,21 +92,21 @@ const offerData = {
         title: "Mastering Effective Communication",
         date: "May 15, 2023",
         time: "9:00 AM - 12:00 PM EST",
-        price: "$99",
+        price: "",
         spots: "8 spots remaining",
       },
       {
         title: "Building Resilience in Challenging Times",
         date: "May 22, 2023",
         time: "1:00 PM - 4:00 PM EST",
-        price: "$99",
+        price: "",
         spots: "5 spots remaining",
       },
       {
         title: "Goal Setting and Achievement Strategies",
         date: "June 5, 2023",
         time: "9:00 AM - 12:00 PM EST",
-        price: "$99",
+        price: "",
         spots: "10 spots remaining",
       },
     ],
@@ -311,7 +311,11 @@ const AcademyItem = () => {
                 }
                 className="btn-primary min-w-96"
               >
-                {getPriceStatus === "pending" ? "Loading" : "Enroll"}
+                {getPriceStatus === "pending"
+                  ? "Loading"
+                  : getPriceStatus === "error"
+                  ? "Something went wrong"
+                  : `Enroll ₦${coachingPrice}`}
               </button>
             </div>
           )}
