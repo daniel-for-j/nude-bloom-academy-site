@@ -167,9 +167,9 @@ export const CourseManager = () => {
   };
 
   const handleDelete = (id: string) => {
-    deleteMutate(id)
-      .then(() => setCourses(courseState.filter((course) => course._id !== id)))
-      .catch((err) => console.log(err));
+    deleteMutate(id).then(() =>
+      setCourses(courseState.filter((course) => course._id !== id))
+    );
   };
 
   if (courseStatus === "pending") {

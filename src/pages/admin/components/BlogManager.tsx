@@ -161,9 +161,9 @@ export const BlogManager = () => {
   };
 
   const handleDelete = async (id: string) => {
-    deleteMutate(id)
-      .then(() => setBlogs(blogState.filter((blog) => blog._id !== id)))
-      .catch((err) => console.log(err));
+    deleteMutate(id).then(() =>
+      setBlogs(blogState.filter((blog) => blog._id !== id))
+    );
   };
 
   if (blogStatus === "pending") {

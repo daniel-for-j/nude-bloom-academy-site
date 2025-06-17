@@ -4,11 +4,9 @@ export async function login(data: { username: string; password: string }) {
   return api
     .post("/auth/", data)
     .then((response) => {
-      console.log(response.data);
       return response.data;
     })
     .catch((error) => {
-      console.log(error);
       throw error;
     });
 }
@@ -28,12 +26,9 @@ export async function addBlog(data: {
       },
     })
     .then((response) => {
-      console.log(response);
       return response.data;
     })
-    .catch((error) => {
-      console.log(error);
-    });
+    .catch((error) => {});
 }
 
 export async function addCourse(data: {
@@ -52,12 +47,9 @@ export async function addCourse(data: {
       },
     })
     .then((response) => {
-      console.log(response);
       return response.data;
     })
-    .catch((error) => {
-      console.log(error);
-    });
+    .catch((error) => {});
 }
 
 export async function addWorkshop(data: {
@@ -77,12 +69,9 @@ export async function addWorkshop(data: {
       },
     })
     .then((response) => {
-      console.log(response);
       return response.data;
     })
-    .catch((error) => {
-      console.log(error);
-    });
+    .catch((error) => {});
 }
 export async function editCourse(
   data: {
@@ -102,10 +91,9 @@ export async function editCourse(
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(response.data);
+
     return response.data;
   } catch (error) {
-    console.log(error);
     throw error; // Re-throw so the mutation can catch it
   }
 }
@@ -127,12 +115,9 @@ export async function editBlog(
       },
     })
     .then((response) => {
-      console.log(response);
       return response.data;
     })
-    .catch((error) => {
-      console.log(error);
-    });
+    .catch((error) => {});
 }
 export async function editWorkshop(
   data: {
@@ -154,12 +139,9 @@ export async function editWorkshop(
       },
     })
     .then((response) => {
-      console.log(response);
       return response.data;
     })
-    .catch((error) => {
-      console.log(error);
-    });
+    .catch((error) => {});
 }
 
 export async function deleteBlog(id: string) {
@@ -172,12 +154,9 @@ export async function deleteBlog(id: string) {
       },
     })
     .then((response) => {
-      console.log(response);
       return response.data;
     })
-    .catch((error) => {
-      console.log(error);
-    });
+    .catch((error) => {});
 }
 
 export async function deleteCourse(id: string) {
@@ -190,12 +169,9 @@ export async function deleteCourse(id: string) {
       },
     })
     .then((response) => {
-      console.log(response);
       return response.data;
     })
-    .catch((error) => {
-      console.log(error);
-    });
+    .catch((error) => {});
 }
 
 export async function sendNewsLetter(data: { subject: string; text: string }) {
@@ -207,11 +183,9 @@ export async function sendNewsLetter(data: { subject: string; text: string }) {
       },
     })
     .then((response) => {
-      console.log(response);
       return response.data;
     })
     .catch((error) => {
-      console.log(error);
       throw error;
     });
 }
@@ -220,11 +194,9 @@ export async function getUsers() {
   return api
     .get("/user")
     .then((response) => {
-      console.log(response.data);
       return response.data;
     })
     .catch((error) => {
-      console.log(error.data);
       return error;
     });
 }
@@ -238,7 +210,6 @@ export async function editPrice(data: { price: number }) {
       },
     })
     .then((response) => {
-      console.log(response);
       return response.data;
     })
     .catch((error) => {

@@ -199,12 +199,10 @@ const AcademyItem = () => {
       setOfferType(type);
     } else {
       // Redirect or handle invalid type
-      console.error("Invalid academy offer type:", type);
     }
   }, [type]);
 
   const handlePurchase = (itemName: string, price: string) => {
-    console.log(`Purchasing ${itemName} for ${price}`);
     toast.success("Thank you for your purchase!", {
       description: "You will receive an email with further instructions.",
     });
