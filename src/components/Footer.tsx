@@ -55,37 +55,38 @@ const Footer = () => {
             </h4>
             <div className="flex space-x-4 mb-4">
               <a
-                href="#"
+                href="https://www.instagram.com/letsoarcommunity/"
+                target="_blank"
                 className="text-primary/80 hover:text-primary transition-colors"
               >
                 <Instagram size={20} />
                 <span className="sr-only">Instagram</span>
               </a>
               <a
-                href="#"
+                href="https://www.linkedin.com/in/chiderah-kalu-idika/"
+                target="_blank"
                 className="text-primary/80 hover:text-primary transition-colors"
               >
                 <Linkedin size={20} />
                 <span className="sr-only">LinkedIn</span>
               </a>
               <a
-                href="#"
+                href="https://web.facebook.com/profile.php?id=61571415393543"
+                target="_blank"
                 className="text-primary/80 hover:text-primary transition-colors"
               >
                 <Facebook size={20} />
                 <span className="sr-only">Facebook</span>
               </a>
               <a
-                href="mailto:contact@soarcommunity.com"
+                href="mailto:letsoaracademy@gmail.com"
                 className="text-primary/80 hover:text-primary transition-colors"
               >
                 <Mail size={20} />
                 <span className="sr-only">Email</span>
               </a>
             </div>
-            <p className="text-primary/70">
-              Contact: contact@soarcommunity.com
-            </p>
+            <p className="text-primary/70">Contact: letsoaracademy@gmail.com</p>
           </div>
         </div>
 
