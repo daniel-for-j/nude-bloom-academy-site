@@ -212,7 +212,7 @@ const Academy = () => {
               <h2 className="section-title text-center mb-12">
                 What Our Students Say
               </h2>
-              {testimonials.Testimonials.map((test) => (
+              {testimonials.Testimonials.slice(0, 6).map((test) => (
                 <div className="grid md:grid-cols-3 gap-8" key={test._id}>
                   <div className="bg-white p-6 rounded-lg shadow-sm">
                     <div className="flex items-center mb-4">

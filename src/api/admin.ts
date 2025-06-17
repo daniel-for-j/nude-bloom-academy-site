@@ -216,3 +216,38 @@ export async function editPrice(data: { price: number }) {
       throw error;
     });
 }
+
+export async function editTestimonial(
+  data: { isVisible: boolean },
+  id: string
+) {
+  const token = sessionStorage.getItem("token");
+  return api
+    .put(`/admin/testimonial/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      throw error.data;
+    });
+}
+
+export async function getTestimonies() {
+  const token = sessionStorage.getItem("token");
+  return api
+    .get("/admin/testimonial", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      return error;
+    });
+}

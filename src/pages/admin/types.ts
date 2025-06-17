@@ -39,3 +39,13 @@ export interface Newsletter {
   sentAt?: string;
   status: "draft" | "sent";
 }
+
+export interface testimonialType {
+  _id: string;
+  name: string;
+  email: string;
+  body: string;
+  programme: string;
+  thumbnailUrl: string;
+  isVisible: boolean;
+}

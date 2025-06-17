@@ -9,6 +9,7 @@ import {
   Mail,
   User,
   Menu,
+  Star,
 } from "lucide-react";
 import { BlogManager } from "./components/BlogManager";
 import { WorkshopManager } from "./components/WorkshopManager";
@@ -16,6 +17,7 @@ import { CourseManager } from "./components/CourseManager";
 import { NewsletterManager } from "./components/NewsLetterManager";
 import { UsersManager } from "./components/UsersManager";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { TestimonialManager } from "./components/Testimonials";
 
 export type AdminSection =
   | "dashboard"
@@ -23,7 +25,8 @@ export type AdminSection =
   | "workshops"
   | "courses"
   | "newsletter"
-  | "users";
+  | "users"
+  | "testimonials";
 
 const Admin = () => {
   const [activeSection, setActiveSection] = useState<AdminSection>("dashboard");
@@ -36,6 +39,7 @@ const Admin = () => {
     { id: "courses", label: "Courses", icon: GraduationCap },
     { id: "newsletter", label: "Newsletter", icon: Mail },
     { id: "users", label: "Users", icon: User },
+    { id: "testimonials", label: "Testimonials", icon: Star },
   ];
 
   const handleSectionChange = (section: AdminSection) => {
@@ -86,6 +90,8 @@ const Admin = () => {
         return <NewsletterManager />;
       case "users":
         return <UsersManager />;
+      case "testimonials":
+        return <TestimonialManager />;
       default:
         return (
           <div className="space-y-4 lg:space-y-6">
@@ -175,6 +181,24 @@ const Admin = () => {
                 <CardContent>
                   <p className="text-xs text-muted-foreground">
                     View registered users
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card
+                className="hover-lift cursor-pointer transition-transform hover:scale-105"
+                onClick={() => handleSectionChange("testimonials")}
+              >
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">
+                    Testimonials
+                  </CardTitle>
+                  <Star className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <p className="text-xs text-muted-foreground">
+                    Choose which user testimonials are visible in the academy
+                    page
                   </p>
                 </CardContent>
               </Card>
