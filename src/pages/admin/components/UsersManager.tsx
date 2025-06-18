@@ -15,6 +15,7 @@ import { editPrice, getUsers } from "@/api/admin";
 import { getPrice } from "@/api/api";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
+import ButtonLoader from "@/components/buttonLoader";
 
 export const UsersManager = () => {
   const { toast } = useToast();
@@ -104,7 +105,11 @@ export const UsersManager = () => {
               onClick={handlePriceUpdate}
               disabled={priceMutateStatus === "pending"}
             >
-              Update Price
+              {priceMutateStatus === "pending" ? (
+                <ButtonLoader size="h-6 w-6" />
+              ) : (
+                "Update Price"
+              )}
             </Button>
           </div>
         </CardContent>

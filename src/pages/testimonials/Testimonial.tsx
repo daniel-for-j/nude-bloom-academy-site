@@ -279,7 +279,7 @@ const Testimonial = () => {
       <div className="bg-stone-50 py-12">
         <div className="container mx-auto px-4 text-center">
           <p className="text-stone-600 mb-4">
-            Thank you for being part of the Let Soar community!
+            Thank you for being part of the SOAR community!
           </p>
           <p className="text-sm text-stone-500">
             Your testimonial will be reviewed and may be featured on our website

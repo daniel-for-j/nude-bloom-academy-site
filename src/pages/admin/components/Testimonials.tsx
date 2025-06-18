@@ -5,6 +5,7 @@ import { testimonialType } from "../types";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { editTestimonial, getTestimonies } from "@/api/admin";
 import { useToast } from "@/hooks/use-toast";
+import ButtonLoader from "@/components/buttonLoader";
 
 export const TestimonialManager = () => {
   const [testimonialState, setTestimonial] = useState<testimonialType[]>([]);
@@ -93,7 +94,13 @@ export const TestimonialManager = () => {
                       });
                     }}
                   >
-                    {blog.isVisible === true ? "Hide" : "Show"}
+                    {editStatus === "pending" ? (
+                      <ButtonLoader size="w-4 h-4" color="border-black" />
+                    ) : blog.isVisible === true ? (
+                      "Hide"
+                    ) : (
+                      "Show"
+                    )}
                   </Button>
                 </div>
               </CardContent>

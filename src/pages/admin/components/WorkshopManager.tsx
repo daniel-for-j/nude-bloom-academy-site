@@ -18,6 +18,7 @@ import { addWorkshop, editWorkshop } from "@/api/admin";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import WorkshopCard from "./WorkshopCard";
+import ButtonLoader from "@/components/buttonLoader";
 
 export const WorkshopManager = () => {
   const { toast } = useToast();
@@ -252,7 +253,11 @@ export const WorkshopManager = () => {
               </div>
               <div className="flex gap-2">
                 <Button type="submit">
-                  {isEditMode ? "Update" : "Create"} Workshop
+                  {addStatus === "pending" ? (
+                    <ButtonLoader size="w-6 h-6" />
+                  ) : (
+                    "Create Workshop"
+                  )}
                 </Button>
                 <Button
                   type="button"
@@ -270,7 +275,9 @@ export const WorkshopManager = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {workshopState &&
           workshopState.length > 0 &&
-          workshopState.map((workshop) => <WorkshopCard workshop={workshop} />)}
+          workshopState.map((workshop) => (
+            <WorkshopCard workshop={workshop} onRefetch={refetch} />
+          ))}
       </div>
     </div>
   );

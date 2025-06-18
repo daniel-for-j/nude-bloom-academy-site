@@ -24,7 +24,7 @@ const About = () => {
                 see people rise up bold, self-aware, and ready to lead in their
                 own space. Broken down into the SOAR Academy, Blog, Podcast, and
                 the Community at large, we create resources and experiences that
-                empower young adults to face fear, own their identity, and
+                empower individuals to face fear, own their identity, and
                 communicate with clarity.
               </p>
               <p className="text-lg text-primary/80">

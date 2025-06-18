@@ -17,6 +17,7 @@ import { getCourses } from "@/api/api";
 import { deleteCourse, addCourse, editCourse } from "@/api/admin";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import ButtonLoader from "@/components/buttonLoader";
 
 export const CourseManager = () => {
   const { toast } = useToast();
@@ -260,14 +261,13 @@ export const CourseManager = () => {
               </div>
               <div className="flex gap-2">
                 <Button type="submit">
-                  {isEditMode ? "Update" : "Create"} Course
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  disabled={addStatus === "pending" || editStatus === "pending"}
-                >
-                  Cancel
+                  {addStatus === "pending" || editStatus === "pending" ? (
+                    <ButtonLoader size="h-6 w-6" />
+                  ) : isEditMode ? (
+                    "Update Course"
+                  ) : (
+                    "Create Course"
+                  )}
                 </Button>
               </div>
             </form>
@@ -321,7 +321,11 @@ export const CourseManager = () => {
                     onClick={() => handleDelete(course._id)}
                     disabled={deleteStatus === "pending"}
                   >
-                    <Trash2 className="h-4 w-4" />
+                    {deleteStatus === "pending" ? (
+                      <ButtonLoader size="w-4 h-4" />
+                    ) : (
+                      <Trash2 className="h-4 w-4" />
+                    )}
                   </Button>
                 </div>
               </CardContent>

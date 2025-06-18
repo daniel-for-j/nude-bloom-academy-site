@@ -149,7 +149,6 @@ export async function deleteBlog(id: string) {
   return api
     .delete(`/admin/blog/${id}`, {
       headers: {
-        "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${token}`,
       },
     })
@@ -164,7 +163,6 @@ export async function deleteCourse(id: string) {
   return api
     .delete(`/admin/course/${id}`, {
       headers: {
-        "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${token}`,
       },
     })
@@ -250,4 +248,18 @@ export async function getTestimonies() {
     .catch((error) => {
       return error;
     });
+}
+
+export async function deleteWorkshop(id: string) {
+  const token = sessionStorage.getItem("token");
+  return api
+    .delete(`/admin/workshop/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {});
 }

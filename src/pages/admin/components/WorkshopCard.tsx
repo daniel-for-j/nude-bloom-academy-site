@@ -1,6 +1,10 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Users, Edit } from "lucide-react";
+import { Users, Trash2 } from "lucide-react";
+import { useMutation } from "@tanstack/react-query";
+import { deleteWorkshop } from "@/api/admin";
+import { useToast } from "@/hooks/use-toast";
+import ButtonLoader from "@/components/buttonLoader";
 
 interface Workshop {
   _id: string;
@@ -18,9 +22,18 @@ interface Workshop {
 
 interface WorkshopCardProps {
   workshop: Workshop;
+  onRefetch: () => void;
 }
 
-const WorkshopCard = ({ workshop }: WorkshopCardProps) => {
+const WorkshopCard = ({ workshop, onRefetch }: WorkshopCardProps) => {
+  const { toast } = useToast();
+  const { mutate, status } = useMutation({
+    mutationFn: deleteWorkshop,
+    onSuccess: (data) => {
+      toast({ description: data.message });
+      onRefetch();
+    },
+  });
   return (
     <Card key={workshop._id} className="hover-lift">
       <CardHeader>
@@ -68,9 +81,20 @@ const WorkshopCard = ({ workshop }: WorkshopCardProps) => {
         </div>
 
         <div className="flex gap-2">
-          {/* <Button size="sm" variant="outline" onClick={() => onEdit(workshop)}>
-            <Edit className="h-4 w-4" />
-          </Button> */}
+          {
+            <Button
+              disabled={status === "pending"}
+              size="sm"
+              variant="destructive"
+              onClick={() => mutate(workshop._id)}
+            >
+              {status === "pending" ? (
+                <ButtonLoader size="h-4 w-4" />
+              ) : (
+                <Trash2 className="h-4 w-4" />
+              )}
+            </Button>
+          }
         </div>
       </CardContent>
     </Card>
