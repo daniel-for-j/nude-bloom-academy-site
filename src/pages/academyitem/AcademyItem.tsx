@@ -376,7 +376,7 @@ const AcademyItem = () => {
             goals. Contact us for more information or to discuss your specific
             needs.
           </p>
-          <a href="mailto:academy@soarcommunity.com" className="btn-primary">
+          <a href="mailto:letsoaracademy@gmail.com" className="btn-primary">
             Contact Us
           </a>
         </div>
