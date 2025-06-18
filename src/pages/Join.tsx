@@ -67,6 +67,7 @@ const Join = () => {
         description: "Redirecting to payment gateway",
       });
       window.location.href = data.data.authorization_url;
+      reset();
     },
     onError: () => {
       toast.success("Error", {
@@ -89,13 +90,10 @@ const Join = () => {
       email: data.email,
       amount: `${100}00`,
     });
-
-    reset();
   };
 
   const handleRegister = async (data: registerType) => {
     await mutate(data);
-    reset();
   };
 
   return (
