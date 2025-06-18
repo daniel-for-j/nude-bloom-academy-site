@@ -155,7 +155,9 @@ export const WorkshopManager = () => {
         });
     }
   };
-
+  if (workshopStatus === "pending") {
+    return <div>Loading...</div>;
+  }
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
